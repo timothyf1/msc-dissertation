@@ -17,6 +17,35 @@ def map_graph(filename):
     return G
 
 
+def sort_node_roads(node, G):
+    # Empty lists to store the roads connected to the node in question
+    roads_single_lane = []
+    roads_multi_lanes = []
+
+    # Checking each road
+
+    for road in G.edges(node, data=True):
+
+        # If the road has a lane attribute we will use this number
+        if lanes := road[2].get("lanes"):
+            if lanes == "1":
+                roads_single_lane.append(road)
+            else:
+                roads_multi_lanes.append(road)
+
+        # Otherwise we will use the type of road
+        else:
+            if road[2].get("highway") in ["unclassified"]:
+                roads_single_lane.append(road)
+            else:
+                roads_multi_lanes.append(road)
+
+    return {
+        "single" : roads_single_lane,
+        "multi" : roads_multi_lanes
+    }
+
+
 def check_node_danger(node, G):
     """
     Check to see if a node is a danger point
@@ -29,29 +58,10 @@ def check_node_danger(node, G):
         boolean: True if the node is a danger point
     """
 
-    # Empty lists to store the roads connected to the node in question
-    roads_with_1_lane = []
-    roads_with_more_than_1_lane = []
-
-    # Checking each node
-    for edge in G.edges(node, data=True):
-
-        # If the road has a lane attribute we will use this number
-        if lanes := edge[2].get("lanes"):
-            if lanes == "1":
-                roads_with_1_lane.append(edge)
-            else:
-                roads_with_more_than_1_lane.append(edge)
-
-        # Otherwise we will use the type of road
-        else:
-            if edge[2].get("highway") in ["unclassified"]:
-                roads_with_1_lane.append(edge)
-            else:
-                roads_with_more_than_1_lane.append(edge)
+    road_lanes = sort_node_roads(node, G)
 
     # If we have roads with 1 lane and other roads we more than 1 lane then this node is a danger node
-    if len(roads_with_1_lane) > 0 and len(roads_with_more_than_1_lane) > 0:
+    if len(road_lanes["single"]) > 0 and len(road_lanes["multi"]) > 0:
         return True
 
     return False
