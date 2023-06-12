@@ -1,5 +1,5 @@
 import osmnx as ox
-
+import geopy.distance
 
 def map_graph(filename):
     """
@@ -13,7 +13,7 @@ def map_graph(filename):
     """
 
     G = ox.graph_from_xml(f"{filename}", simplify=False)
-    G = ox.bearing.add_edge_bearings(G)
+    G = ox.bearing.add_edge_bearings(G, precision=5)
     return G
 
 
@@ -67,9 +67,55 @@ def check_node_danger(node, G):
     return False
 
 
+def node_alert_points(node, G):
+    """
+    Calculates the location for the alert points for a danger node
+
+    Arguments:
+        node: The node which we want to calcutale the alert points for
+        G: The graph which we using
+
+    Returns:
+        A list containing a dictonary with the following keys:
+            id: A ID for the alert point
+            node: The node ID which the alert point is for
+            x: longitude of the alert point
+            y: latitude of the alert point
+            bearing: The direction of travel which the alert point is should activate
+    """
+
+    node_obj = G.nodes[node]
+    road_lanes = sort_node_roads(node, G)
+
+    alert_points = []
+
+    for road in road_lanes["single"]:
+        start = geopy.Point(node_obj["y"], node_obj["x"])
+
+        alert_location = geopy.distance.distance(meters=50).destination(
+            point=start,
+            bearing=float(road[2]["bearing"])
+        )
+
+        alert_points.append({
+            "id" : f"{node}{int(road[2]['bearing'])}",
+            "node" : node,
+            "x" : alert_location.longitude,
+            "y" : alert_location.latitude,
+            "bearing" : (road[2]["bearing"] - 180) % 360
+        })
+
+    return alert_points
+
+
 if __name__ == "__main__":
     G = map_graph("silchester_filtered.osm")
     print(f"Total Nodes: {len(list(G.nodes))}")
 
     danger_nodes = [node for node in G.nodes if check_node_danger(node, G)]
     print(f"Number of danger nodes: {len(danger_nodes)}")
+
+    alert_locations = []
+    for node in danger_nodes:
+        alert_locations.extend(node_alert_points(node, G))
+    print(f"Number of alert locations: {len(alert_locations)}")
