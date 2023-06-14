@@ -1,6 +1,17 @@
 import osmnx as ox
 import geopy.distance
 
+class Alert():
+
+    def __init__(self, id, alert_type, node, latitude, longitude, bearing):
+        self.id = id
+        self.type = alert_type
+        self.node = node
+        self.latitude = latitude
+        self.longitude = longitude
+        self.bearing = bearing
+
+
 def map_graph(filename):
     """
     Import osm data into a networkx graph
@@ -101,13 +112,14 @@ def find_alert_location(G, node, road, distance):
                 bearing=float(current_road[2]["bearing"])
             )
 
-            return {
-                "id" : f"{node}{int(road[2]['bearing'])}",
-                "alert_for_node" : node,
-                "x" : alert_location.longitude,
-                "y" : alert_location.latitude,
-                "bearing" : (current_road[2]["bearing"] - 180) % 360
-            }
+            return Alert(
+                id = f"{node}{int(road[2]['bearing'])}",
+                alert_type = 1,
+                node = node,
+                latitude = alert_location.longitude,
+                longitude = alert_location.latitude,
+                bearing = (current_road[2]["bearing"] - 180) % 360
+            )
 
         else:
             distance_remaining -= current_road[2]["length"]
@@ -134,13 +146,14 @@ def find_alert_location(G, node, road, distance):
                     bearing=float(current_road[2]["bearing"])
                 )
 
-                return {
-                    "id" : f"{node}{int(road[2]['bearing'])}",
-                    "alert_for_node" : node,
-                    "x" : alert_location.longitude,
-                    "y" : alert_location.latitude,
-                    "bearing" : (current_road[2]["bearing"] - 180) % 360
-                }
+                return Alert(
+                    id = f"{node}{int(road[2]['bearing'])}",
+                    alert_type = 1,
+                    node = node,
+                    latitude = alert_location.longitude,
+                    longitude = alert_location.latitude,
+                    bearing = (current_road[2]["bearing"] - 180) % 360
+                )
 
 
 def node_alert_points(node, G):
@@ -166,8 +179,8 @@ def node_alert_points(node, G):
     alert_points = []
 
     for road in roads:
-        if alert_point := find_alert_location(G, node, road, 50):
-            alert_points.append(alert_point)
+        if alert := find_alert_location(G, node, road, 50):
+            alert_points.append(alert)
 
     return alert_points
 
