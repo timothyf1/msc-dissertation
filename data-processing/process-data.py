@@ -1,5 +1,6 @@
 import osmnx as ox
 import geopy.distance
+import json
 
 class Alert():
 
@@ -113,7 +114,7 @@ def find_alert_location(G, node, road, distance):
             )
 
             return Alert(
-                id = f"{node}{int(road[2]['bearing'])}",
+                id = f"{node}b{int(road[2]['bearing'])}",
                 alert_type = 1,
                 node = node,
                 latitude = alert_location.longitude,
@@ -147,7 +148,7 @@ def find_alert_location(G, node, road, distance):
                 )
 
                 return Alert(
-                    id = f"{node}{int(road[2]['bearing'])}",
+                    id = f"{node}b{int(road[2]['bearing'])}",
                     alert_type = 1,
                     node = node,
                     latitude = alert_location.longitude,
@@ -196,3 +197,14 @@ if __name__ == "__main__":
     for node in danger_nodes:
         alert_locations.extend(node_alert_points(node, G))
     print(f"Number of alert locations: {len(alert_locations)}")
+
+    with open("silchester.json", "w") as f:
+        json.dump(
+            {
+                "area" : "silchester",
+                "alerts" : alert_locations
+            },
+            f,
+            default=vars
+        )
+    print(f"Alert locations saved to silchester.json")
