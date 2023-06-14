@@ -67,6 +67,82 @@ def check_node_danger(node, G):
     return False
 
 
+def find_alert_location(G, node, road, distance):
+    """
+    Calculates the alert location for a node along a given road and distance
+
+    Arguments:
+        G: The graph which we using
+        node: The node which we want to calcutale the alert points for
+        road: The road which we will be looking for the alert location
+        distance: The distance along the road we are going from the node
+
+    Returns:
+        A dictionary item for the alert location with the following keys:
+            id: A ID for the alert point
+            node: The node ID which the alert point is for
+            x: longitude of the alert point
+            y: latitude of the alert point
+            bearing: The direction of travel which the alert point is should activate
+    """
+
+    distance_remaining = distance
+    current_road = road
+    current_node = node
+
+    while distance_remaining > 0:
+
+        # Check to see if the length of the road piece is long enough for the remaining distance
+        if current_road[2]["length"] >= distance_remaining:
+            node_obj = G.nodes[current_node]
+            start = geopy.Point(node_obj["y"], node_obj["x"])
+            alert_location = geopy.distance.distance(meters=distance_remaining).destination(
+                point=start,
+                bearing=float(current_road[2]["bearing"])
+            )
+
+            return {
+                "id" : f"{node}{int(road[2]['bearing'])}",
+                "alert_for_node" : node,
+                "x" : alert_location.longitude,
+                "y" : alert_location.latitude,
+                "bearing" : (current_road[2]["bearing"] - 180) % 360
+            }
+
+        else:
+            distance_remaining -= current_road[2]["length"]
+            if current_node == current_road[0]:
+                next_node = current_road[1]
+            else:
+                next_node = current_road[0]
+
+            next_node_roads = G.edges(next_node, data=True)
+
+            # Check to see if the next node is continuation of the road or a junction
+            if len(next_node_roads) == 2:
+                for potential_road in next_node_roads:
+                    if current_node not in potential_road:
+                        current_road = potential_road
+                current_node = next_node
+
+            else:
+                # If the next node is a junction set the alert location halfway along the current road section
+                node_obj = G.nodes[current_node]
+                start = geopy.Point(node_obj["y"], node_obj["x"])
+                alert_location = geopy.distance.distance(meters=current_road[2]["length"]/2).destination(
+                    point=start,
+                    bearing=float(current_road[2]["bearing"])
+                )
+
+                return {
+                    "id" : f"{node}{int(road[2]['bearing'])}",
+                    "alert_for_node" : node,
+                    "x" : alert_location.longitude,
+                    "y" : alert_location.latitude,
+                    "bearing" : (current_road[2]["bearing"] - 180) % 360
+                }
+
+
 def node_alert_points(node, G):
     """
     Calculates the location for the alert points for a danger node
@@ -84,26 +160,14 @@ def node_alert_points(node, G):
             bearing: The direction of travel which the alert point is should activate
     """
 
-    node_obj = G.nodes[node]
-    road_lanes = sort_node_roads(node, G)
+    # Find roads we need to look for alert points on
+    roads = sort_node_roads(node, G)["single"]
 
     alert_points = []
 
-    for road in road_lanes["single"]:
-        start = geopy.Point(node_obj["y"], node_obj["x"])
-
-        alert_location = geopy.distance.distance(meters=50).destination(
-            point=start,
-            bearing=float(road[2]["bearing"])
-        )
-
-        alert_points.append({
-            "id" : f"{node}{int(road[2]['bearing'])}",
-            "node" : node,
-            "x" : alert_location.longitude,
-            "y" : alert_location.latitude,
-            "bearing" : (road[2]["bearing"] - 180) % 360
-        })
+    for road in roads:
+        if alert_point := find_alert_location(G, node, road, 50):
+            alert_points.append(alert_point)
 
     return alert_points
 
