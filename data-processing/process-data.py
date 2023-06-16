@@ -2,6 +2,8 @@ import osmnx as ox
 import geopy.distance
 import json
 import sys
+from progressbar import progressbar
+
 
 class Alert():
 
@@ -191,30 +193,39 @@ if __name__ == "__main__":
 
     input_file = sys.argv[1]
 
+    print("Importing osm data to graph")
     G = map_graph(input_file)
     print(f"Total Nodes: {len(list(G.nodes))}")
 
-    danger_nodes = [node for node in G.nodes if check_node_danger(node, G)]
+    print("Checking for danger nodes")
+    danger_nodes = []
+    for node in progressbar(G.nodes):
+        if check_node_danger(node, G):
+            danger_nodes.append(node)
     print(f"Number of danger nodes: {len(danger_nodes)}")
 
+    print("Calculating alert points")
     alert_locations = []
-    for node in danger_nodes:
+    for node in progressbar(danger_nodes):
         alert_locations.extend(node_alert_points(node, G))
     print(f"Number of alert locations: {len(alert_locations)}")
 
-    with open(f"alerts/alerts_{input_file[:-4]}.json", "w") as f:
+    if input_file[:2] == ".\\":
+        input_file = input_file[2:]
+
+    with open(f"alerts/alerts_{input_file[13:-4]}.json", "w") as f:
         json.dump(
             {
-                "area" : input_file[:-4],
+                "area" : input_file[14:-4],
                 "alerts" : alert_locations
             },
             f,
             default=vars
         )
-    print(f"Alert locations saved to alerts/alerts_{input_file[:-4]}.json")
+    print(f"Alert locations saved to alerts/alerts_{input_file[13:-4]}.json")
 
     if "debug-file" in sys.argv:
         for alert in alert_locations:
             G.add_node(alert.id, x=alert.longitude, y=alert.latitude, bearing=alert.bearing)
 
-        ox.save_graph_xml(G, filepath=f"osm-with-alerts/{input_file[:-4]}-alerts.osm")
+        ox.save_graph_xml(G, filepath=f"osm-with-alerts/{input_file[13:-4]}-alerts.osm")
