@@ -1,6 +1,7 @@
 import osmnx as ox
 import geopy.distance
 import json
+import sys
 
 class Alert():
 
@@ -114,11 +115,11 @@ def find_alert_location(G, node, road, distance):
             )
 
             return Alert(
-                id = f"{node}b{int(road[2]['bearing'])}",
+                id = f"{node}{int(road[2]['bearing'])}",
                 alert_type = 1,
                 node = node,
-                latitude = alert_location.longitude,
-                longitude = alert_location.latitude,
+                latitude = alert_location.latitude,
+                longitude = alert_location.longitude,
                 bearing = (current_road[2]["bearing"] - 180) % 360
             )
 
@@ -148,11 +149,11 @@ def find_alert_location(G, node, road, distance):
                 )
 
                 return Alert(
-                    id = f"{node}b{int(road[2]['bearing'])}",
+                    id = f"{node}{int(road[2]['bearing'])}",
                     alert_type = 1,
                     node = node,
-                    latitude = alert_location.longitude,
-                    longitude = alert_location.latitude,
+                    latitude = alert_location.latitude,
+                    longitude = alert_location.longitude,
                     bearing = (current_road[2]["bearing"] - 180) % 360
                 )
 
@@ -187,7 +188,10 @@ def node_alert_points(node, G):
 
 
 if __name__ == "__main__":
-    G = map_graph("silchester_filtered.osm")
+
+    input_file = sys.argv[1]
+
+    G = map_graph(input_file)
     print(f"Total Nodes: {len(list(G.nodes))}")
 
     danger_nodes = [node for node in G.nodes if check_node_danger(node, G)]
@@ -198,13 +202,19 @@ if __name__ == "__main__":
         alert_locations.extend(node_alert_points(node, G))
     print(f"Number of alert locations: {len(alert_locations)}")
 
-    with open("silchester.json", "w") as f:
+    with open(f"alerts_{input_file[:-4]}.json", "w") as f:
         json.dump(
             {
-                "area" : "silchester",
+                "area" : input_file[:-4],
                 "alerts" : alert_locations
             },
             f,
             default=vars
         )
-    print(f"Alert locations saved to silchester.json")
+    print(f"Alert locations saved to alerts_{input_file[:-4]}.json")
+
+    if "debug-file" in sys.argv:
+        for alert in alert_locations:
+            G.add_node(alert.id, x=alert.longitude, y=alert.latitude, bearing=alert.bearing)
+
+        ox.save_graph_xml(G, filepath=f"{input_file[:-4]}-alerts.osm")
