@@ -202,7 +202,7 @@ if __name__ == "__main__":
         alert_locations.extend(node_alert_points(node, G))
     print(f"Number of alert locations: {len(alert_locations)}")
 
-    with open(f"alerts_{input_file[:-4]}.json", "w") as f:
+    with open(f"alerts/alerts_{input_file[:-4]}.json", "w") as f:
         json.dump(
             {
                 "area" : input_file[:-4],
@@ -211,10 +211,10 @@ if __name__ == "__main__":
             f,
             default=vars
         )
-    print(f"Alert locations saved to alerts_{input_file[:-4]}.json")
+    print(f"Alert locations saved to alerts/alerts_{input_file[:-4]}.json")
 
     if "debug-file" in sys.argv:
         for alert in alert_locations:
             G.add_node(alert.id, x=alert.longitude, y=alert.latitude, bearing=alert.bearing)
 
-        ox.save_graph_xml(G, filepath=f"{input_file[:-4]}-alerts.osm")
+        ox.save_graph_xml(G, filepath=f"osm-with-alerts/{input_file[:-4]}-alerts.osm")
