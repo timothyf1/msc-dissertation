@@ -27,7 +27,7 @@ def map_graph(filename):
         networkx.MultiDiGraph graph
     """
 
-    G = ox.graph_from_xml(f"{filename}", simplify=False)
+    G = ox.graph_from_xml(f"{filename}", simplify=False, retain_all=True)
     G = ox.bearing.add_edge_bearings(G, precision=5)
     return G
 
