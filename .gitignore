@@ -7,6 +7,10 @@ temp/
 *.osm
 *.pbf
 
+# Keep test OSM files
+!data-processing/test/osm-data/*/*.osm
+
+
 # Exe files
 *.exe
 
