@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-101801' action='modify' visible='true' lat='51.34952324489' lon='-1.08083611396' />
+  <node id='-101802' action='modify' visible='true' lat='51.35038137963' lon='-1.07944009308' />
+  <node id='-101803' action='modify' visible='true' lat='51.34954618987' lon='-1.07570757408' />
+  <node id='-101804' action='modify' visible='true' lat='51.34822453981' lon='-1.07667744122' />
+  <node id='-101805' action='modify' visible='true' lat='51.34819700503' lon='-1.0795356103' />
+  <node id='-101807' action='modify' visible='true' lat='51.35005488681' lon='-1.07798096666' />
+  <node id='-101808' action='modify' visible='true' lat='51.35082191315' lon='-1.07654518661' />
+  <node id='-101809' action='modify' visible='true' lat='51.34824289632' lon='-1.07414990867' />
+  <node id='-101810' action='modify' visible='true' lat='51.34896342969' lon='-1.07613522473' />
+  <node id='-101811' action='modify' visible='true' lat='51.34816488109' lon='-1.08237908441' />
+  <node id='-101812' action='modify' visible='true' lat='51.3488587325' lon='-1.08018449199' />
+  <node id='-101813' action='modify' visible='true' lat='51.35053740241' lon='-1.08225417728' />
+  <node id='-101814' action='modify' visible='true' lat='51.3499239086' lon='-1.08018431409' />
+  <way id='-102023' action='modify' visible='true'>
+    <nd ref='-101810' />
+    <nd ref='-101804' />
+    <nd ref='-101805' />
+    <nd ref='-101812' />
+    <tag k='highway' v='tertiary' />
+    <tag k='junction' v='roundabout' />
+  </way>
+  <way id='-102029' action='modify' visible='true'>
+    <nd ref='-101807' />
+    <nd ref='-101808' />
+    <tag k='highway' v='residential' />
+    <tag k='lanes' v='1' />
+  </way>
+  <way id='-102030' action='modify' visible='true'>
+    <nd ref='-101809' />
+    <nd ref='-101810' />
+    <tag k='highway' v='tertiary' />
+  </way>
+  <way id='-102032' action='modify' visible='true'>
+    <nd ref='-101811' />
+    <nd ref='-101812' />
+    <tag k='highway' v='unclassified' />
+  </way>
+  <way id='-102034' action='modify' visible='true'>
+    <nd ref='-101813' />
+    <nd ref='-101814' />
+    <tag k='highway' v='tertiary' />
+  </way>
+  <way id='-102150' action='modify' visible='true'>
+    <nd ref='-101812' />
+    <nd ref='-101801' />
+    <nd ref='-101814' />
+    <tag k='highway' v='tertiary' />
+    <tag k='junction' v='roundabout' />
+  </way>
+  <way id='-102151' action='modify' visible='true'>
+    <nd ref='-101814' />
+    <nd ref='-101802' />
+    <nd ref='-101807' />
+    <tag k='highway' v='tertiary' />
+    <tag k='junction' v='roundabout' />
+  </way>
+  <way id='-102152' action='modify' visible='true'>
+    <nd ref='-101807' />
+    <nd ref='-101803' />
+    <nd ref='-101810' />
+    <tag k='highway' v='tertiary' />
+    <tag k='junction' v='roundabout' />
+  </way>
+</osm>
