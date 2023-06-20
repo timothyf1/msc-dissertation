@@ -7,6 +7,9 @@ temp/
 *.osm
 *.pbf
 
+# Pickle dump files
+*.pckl
+
 # Keep test OSM files
 !data-processing/test/osm-data/*/*.osm
 

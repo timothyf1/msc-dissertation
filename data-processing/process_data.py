@@ -1,6 +1,8 @@
 import osmnx as ox
 import json
 import sys
+import os
+import pickle
 from networkx import MultiDiGraph
 from progressbar import progressbar
 
@@ -102,8 +104,16 @@ if __name__ == "__main__":
 
     input_file = sys.argv[1]
 
-    print("Importing osm data to graph")
-    G = map_graph(input_file)
+    if input_file[:2] == ".\\":
+        input_file = input_file[2:]
+
+    if os.path.isfile(f"dump/{input_file[13:-4]}.pckl"):
+        print("Using existing pickle dump")
+        with open(f"dump/{input_file[13:-4]}.pckl", "rb") as f:
+            G = pickle.load(f)
+    else:
+        print("Importing osm data to graph")
+        G = map_graph(input_file)
 
     print(f"Total Nodes: {len(list(G.nodes()))}")
 
@@ -111,13 +121,10 @@ if __name__ == "__main__":
 
     print(f"Number of alert locations: {len(alertpoints)}")
 
-    if input_file[:2] == ".\\":
-        input_file = input_file[2:]
-
     with open(f"alerts/alerts_{input_file[13:-4]}.json", "w") as f:
         json.dump(
             {
-                "area" : input_file[14:-4],
+                "area" : input_file[13:-4],
                 "alerts" : alertpoints
             },
             f,
@@ -130,3 +137,7 @@ if __name__ == "__main__":
             G.add_node(alert.id, x=alert.longitude, y=alert.latitude, bearing=alert.bearing)
 
         ox.save_graph_xml(G, filepath=f"osm-with-alerts/{input_file[13:-4]}-alerts.osm")
+
+    if "dump" in sys.argv:
+        with open(f"dump/{input_file[13:-4]}.pckl", "wb") as f:
+            pickle.dump(G, f)
