@@ -41,6 +41,15 @@ class Graph(MultiDiGraph):
 
         return alert_points
 
+    def node_num_of_roads(self, node):
+        edges = list(self.out_edges(node))
+
+        adjacent_nodes = [edge[1] for edge in edges]
+        for edge in self.in_edges(node):
+            if edge[0] not in adjacent_nodes:
+                adjacent_nodes.append(edge)
+
+        return len(adjacent_nodes)
 
 def map_graph(filename):
     """

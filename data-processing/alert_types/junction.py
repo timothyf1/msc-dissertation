@@ -6,7 +6,8 @@ class Junction(AlertType):
     def alert_locations(G, node):
         roads = G.edges(node, data=True)
 
-        if len(roads) <= 2:
+        # Check num of roads connected to node
+        if G.node_num_of_roads(node) <= 2:
             return []
 
         road_lanes = AlertType.sort_roads(roads)

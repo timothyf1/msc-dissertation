@@ -22,7 +22,6 @@ class TestJunction(unittest.TestCase):
         print("Into")
         for node in G.nodes:
             edges = G.edges(node, data=True)
-            print(f"Num of edges {len(edges)} - {edges}")
             alert_points.extend(Junction.alert_locations(G, node))
 
         assert len(alert_points) == 1
