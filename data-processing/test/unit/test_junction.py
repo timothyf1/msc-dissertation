@@ -36,3 +36,14 @@ class TestJunction(unittest.TestCase):
             alert_points.extend(Junction.alert_locations(G, node))
 
         assert len(alert_points) == 0
+
+    def test_tert_1_lane_joining_resd(self):
+        G = map_graph("test/osm-data/junction/tert_1_lane_joining_resd.osm")
+        G.__class__ = Graph
+
+        alert_points = []
+        for node in G.nodes:
+            edges = G.edges(node, data=True)
+            alert_points.extend(Junction.alert_locations(G, node))
+
+        assert len(alert_points) == 1
