@@ -51,6 +51,15 @@ class Graph(MultiDiGraph):
 
         return len(adjacent_nodes)
 
+    def node_part_of_roundabout(self, node):
+        roads = self.edges(node, data=True)
+
+        for road in roads:
+            if road[2].get("junction") == "roundabout":
+                return True
+        return False
+
+
 def map_graph(filename):
     """
     Import osm data into a networkx graph
