@@ -73,6 +73,7 @@ def map_graph(filename):
 
     G = ox.graph_from_xml(f"{filename}", simplify=False, retain_all=True)
     G = ox.bearing.add_edge_bearings(G, precision=5)
+    G.__class__ = Graph
     return G
 
 
@@ -82,7 +83,6 @@ if __name__ == "__main__":
 
     print("Importing osm data to graph")
     G = map_graph(input_file)
-    G.__class__ = Graph
 
     print(f"Total Nodes: {len(list(G.nodes()))}")
 
