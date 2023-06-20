@@ -7,6 +7,9 @@ from progressbar import progressbar
 from alert_types import alerts_types
 
 class Graph(MultiDiGraph):
+    """
+    Class inherits MultiDiGraph and adds additional methods
+    """
 
     def node_alert_points(self, node):
         """
@@ -42,6 +45,15 @@ class Graph(MultiDiGraph):
         return alert_points
 
     def node_num_of_roads(self, node):
+        """
+        Method to calculate the number of roads connected to a node
+
+        Arguments
+            node: The node we wish to check
+
+        Returns
+            int: The number of connected roads
+        """
         edges = list(self.out_edges(node))
 
         adjacent_nodes = [edge[1] for edge in edges]
@@ -52,10 +64,19 @@ class Graph(MultiDiGraph):
         return len(adjacent_nodes)
 
     def node_part_of_roundabout(self, node):
+        """
+        Check to see if the node is part of a roundabout
+
+        Arguments
+            node: The node we wish to check
+
+        Returns
+            boolean: True if the node is part of a roundabout
+        """
         roads = self.edges(node, data=True)
 
         for road in roads:
-            if road[2].get("junction") == "roundabout":
+            if road[2].get("junction") in ["roundabout", "circular"]:
                 return True
         return False
 

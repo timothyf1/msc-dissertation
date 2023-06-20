@@ -3,6 +3,9 @@ import geopy.distance
 
 
 class Alert():
+    """
+    Class to contain information for an alert location
+    """
 
     def __init__(self, id, alert_type, node, latitude, longitude, bearing):
         self.id = id
@@ -14,6 +17,9 @@ class Alert():
 
 
 class AlertType(ABC):
+    """
+    Base class for checking and calclating alert points
+    """
 
     @staticmethod
     @abstractmethod
