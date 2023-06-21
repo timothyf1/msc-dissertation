@@ -100,12 +100,15 @@ def map_graph(filename):
     return G
 
 
-if __name__ == "__main__":
+def find_alert_points(filename, dump=False, debug_file=False):
+    """
+    Main function
 
-    input_file = sys.argv[1]
-
-    if input_file[:2] == ".\\":
-        input_file = input_file[2:]
+    Arguments:
+        filename: The filename of the osm file which alert points are calculated for
+        dump (optional): Dump the Graph data to a pickle file to speed up load time
+        dump_file (optional): Option to save the alert points to an osm file with map data.
+    """
 
     if os.path.isfile(f"dump/{input_file[13:-4]}.pckl"):
         print("Using existing pickle dump")
@@ -132,12 +135,25 @@ if __name__ == "__main__":
         )
     print(f"Alert locations saved to alerts/alerts_{input_file[13:-4]}.json")
 
-    if "debug-file" in sys.argv:
+    if debug_file:
         for alert in alertpoints:
             G.add_node(alert.id, x=alert.longitude, y=alert.latitude, bearing=alert.bearing)
 
         ox.save_graph_xml(G, filepath=f"osm-with-alerts/{input_file[13:-4]}-alerts.osm")
 
-    if "dump" in sys.argv:
+    if dump:
         with open(f"dump/{input_file[13:-4]}.pckl", "wb") as f:
             pickle.dump(G, f)
+
+
+if __name__ == "__main__":
+
+    input_file = sys.argv[1]
+
+    if input_file[:2] == ".\\":
+        input_file = input_file[2:]
+
+    dump = True if "dump" in sys.argv else False
+    debug_file = True if "debug-file" in sys.argv else False
+
+    find_alert_points(input_file, dump=dump, debug_file=debug_file)
