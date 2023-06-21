@@ -17,7 +17,7 @@ class TestJunction(unittest.TestCase):
         G = map_graph("test/osm-data/junction/junction_unclass_oneway_into_secondary.osm")
 
         alert_points = []
-        print("Into")
+
         for node in G.nodes:
             edges = G.edges(node, data=True)
             alert_points.extend(Junction.alert_locations(G, node))
@@ -26,6 +26,16 @@ class TestJunction(unittest.TestCase):
 
     def test_junction_unclass_oneway_leaving_secondary(self):
         G = map_graph("test/osm-data/junction/junction_unclass_oneway_leaving_secondary.osm")
+
+        alert_points = []
+        for node in G.nodes:
+            edges = G.edges(node, data=True)
+            alert_points.extend(Junction.alert_locations(G, node))
+
+        assert len(alert_points) == 0
+
+    def test_junction_2_cuclass_intercept(self):
+        G = map_graph("test/osm-data/junction/junction_2_cuclass_intercept.osm")
 
         alert_points = []
         for node in G.nodes:
