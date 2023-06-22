@@ -54,3 +54,42 @@ class TestAlertType(unittest.TestCase):
 
     def test_alert_locations(self):
         assert AlertType.alert_locations("a", "b") == None
+
+    def test_find_alert_location_1(self):
+        G = map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
+        node = -102069
+
+        in_roads = G.in_edges(node, data=True)
+        in_road_lanes = AlertType.sort_roads(in_roads)
+
+        alert_location = AlertType.find_alert_location(G, node, in_road_lanes["single"][0], 50)
+
+        assert alert_location["latitude"] == 51.35721666673582
+        assert alert_location["longitude"] == -1.0919827977286938
+        assert alert_location["bearing"] == 88.07327
+
+    def test_find_alert_location_2(self):
+        G = map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
+        node = -102069
+
+        in_roads = G.in_edges(node, data=True)
+        in_road_lanes = AlertType.sort_roads(in_roads)
+
+        alert_location = AlertType.find_alert_location(G, node, in_road_lanes["single"][1], 50)
+
+        assert alert_location["latitude"] == 51.35701908374297
+        assert alert_location["longitude"] == -1.090646875858708
+        assert alert_location["bearing"] == 320.88173
+
+    def test_find_alert_location_3(self):
+        G = map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
+        node = -102067
+
+        in_roads = G.in_edges(node, data=True)
+        in_road_lanes = AlertType.sort_roads(in_roads)
+
+        alert_location = AlertType.find_alert_location(G, node, in_road_lanes["single"][1], 50)
+
+        assert alert_location["latitude"] == 51.35568477700531
+        assert alert_location["longitude"] == -1.0965863553748094
+        assert alert_location["bearing"] == 18.17436

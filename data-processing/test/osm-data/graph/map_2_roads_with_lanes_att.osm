@@ -10,11 +10,13 @@
   <node id='-102074' action='modify' visible='true' lat='51.35581730358' lon='-1.09273103876' />
   <node id='-102075' action='modify' visible='true' lat='51.35513085124' lon='-1.09469632239' />
   <node id='-102076' action='modify' visible='true' lat='51.35667015428' lon='-1.09829379072' />
-  <node id='-102077' action='modify' visible='true' lat='51.354964437' lon='-1.09722787418' />
+  <node id='-102165' action='modify' visible='true' lat='51.35551046326' lon='-1.09667823181' />
+  <node id='-102187' action='modify' visible='true' lat='51.35709135786' lon='-1.09074074774' />
   <way id='-102486' action='modify' visible='true'>
     <nd ref='-102067' />
     <nd ref='-102068' />
     <nd ref='-102069' />
+    <nd ref='-102187' />
     <nd ref='-102070' />
     <nd ref='-102071' />
     <tag k='highway' v='tertiary' />
@@ -31,8 +33,8 @@
     <tag k='highway' v='secondary' />
     <tag k='lanes' v='2' />
   </way>
-  <way id='-102496' action='modify' visible='true'>
-    <nd ref='-102077' />
+  <way id='-102727' action='modify' visible='true'>
+    <nd ref='-102165' />
     <nd ref='-102067' />
     <tag k='highway' v='tertiary' />
     <tag k='lanes' v='1' />
