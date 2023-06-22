@@ -97,12 +97,12 @@ class AlertType(ABC):
                 start = geopy.Point(node_obj["y"], node_obj["x"])
                 alert_location = geopy.distance.distance(meters=distance_remaining).destination(
                     point=start,
-                    bearing=float(current_road[2]["bearing"])
+                    bearing=float(current_road[2]["bearing"])-180
                 )
                 return {
                     "latitude" : alert_location.latitude,
                     "longitude" : alert_location.longitude,
-                    "bearing" : (current_road[2]["bearing"] - 180) % 360
+                    "bearing" : current_road[2]["bearing"]
                 }
 
             else:
@@ -112,11 +112,11 @@ class AlertType(ABC):
                 else:
                     next_node = current_road[0]
 
-                next_node_roads = G.edges(next_node, data=True)
+                next_node_in_roads = G.in_edges(next_node, data=True)
 
                 # Check to see if the next node is continuation of the road or a junction
-                if len(next_node_roads) == 2:
-                    for potential_road in next_node_roads:
+                if G.node_num_of_roads(next_node) == 2:
+                    for potential_road in next_node_in_roads:
                         if current_node not in potential_road:
                             current_road = potential_road
                     current_node = next_node
@@ -127,10 +127,10 @@ class AlertType(ABC):
                     start = geopy.Point(node_obj["y"], node_obj["x"])
                     alert_location = geopy.distance.distance(meters=current_road[2]["length"]/2).destination(
                         point=start,
-                        bearing=float(current_road[2]["bearing"])
+                        bearing=float(current_road[2]["bearing"])-180
                     )
                     return {
                         "latitude" : alert_location.latitude,
                         "longitude" : alert_location.longitude,
-                        "bearing" : (current_road[2]["bearing"] - 180) % 360
+                        "bearing" : current_road[2]["bearing"]
                     }
