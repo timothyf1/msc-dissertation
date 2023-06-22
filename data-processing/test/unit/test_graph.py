@@ -94,3 +94,34 @@ class TestGraph(unittest.TestCase):
         assert G.node_part_of_roundabout(-101979) == False
         assert G.node_part_of_roundabout(-101980) == False
         assert G.node_part_of_roundabout(-101981) == True
+
+    def test_node_alert_points_1(self):
+        G = map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
+        node = -102069
+
+        alert_points = G.node_alert_points(node)
+
+        assert len(alert_points) == 2
+
+    def test_node_alert_points_2(self):
+        G = map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
+        node = -102067
+
+        alert_points = G.node_alert_points(node)
+
+        assert len(alert_points) == 2
+
+    def test_node_alert_points_2(self):
+        G = map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
+        node = -102068
+
+        alert_points = G.node_alert_points(node)
+
+        assert len(alert_points) == 0
+
+    def test_all_alert_points(self):
+        G = map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
+
+        alert_points = G.all_alert_points()
+
+        assert len(alert_points) == 4
