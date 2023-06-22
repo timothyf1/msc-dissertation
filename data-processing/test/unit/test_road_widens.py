@@ -74,3 +74,21 @@ class TestRoadWidens(unittest.TestCase):
             alert_points.extend(RoadWidens.alert_locations(G, node))
 
         assert len(alert_points) == 0
+
+    def test_road_coming_into_one_way(self):
+        G = map_graph("test/osm-data/road_widens/road_coming_into_one_way.osm")
+
+        alert_points = []
+        for node in G.nodes:
+            alert_points.extend(RoadWidens.alert_locations(G, node))
+
+        assert len(alert_points) == 0
+
+    def test_unclass_1_to_2_lanes_one_way(self):
+        G = map_graph("test/osm-data/road_widens/unclass_1_to_2_lanes_one_way.osm")
+
+        alert_points = []
+        for node in G.nodes:
+            alert_points.extend(RoadWidens.alert_locations(G, node))
+
+        assert len(alert_points) == 1
