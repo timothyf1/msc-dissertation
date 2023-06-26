@@ -1,5 +1,5 @@
 from alert_types.base import AlertType
-from process_data import map_graph, Graph
+from graph import Graph
 import osmnx
 import unittest
 
@@ -22,7 +22,7 @@ class TestAlertType(unittest.TestCase):
         assert alert.type == 3
 
     def test_sort_roads_1(self):
-        G = map_graph("test/osm-data/graph/map.osm")
+        G = Graph.create_map_graph("test/osm-data/graph/map.osm")
 
         roads = G.edges(-101753, data=True)
         roads_sorted = AlertType.sort_roads(roads)
@@ -31,7 +31,7 @@ class TestAlertType(unittest.TestCase):
         assert len(roads_sorted["multi"]) == 4
 
     def test_sort_roads_2(self):
-        G = map_graph("test/osm-data/graph/map.osm")
+        G = Graph.create_map_graph("test/osm-data/graph/map.osm")
 
         roads = G.edges(-101800, data=True)
         roads_sorted = AlertType.sort_roads(roads)
@@ -40,7 +40,7 @@ class TestAlertType(unittest.TestCase):
         assert len(roads_sorted["multi"]) == 2
 
     def test_sort_roads_3(self):
-        G = map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
+        G = Graph.create_map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
 
         roads = G.edges(-102069, data=True)
         roads_sorted = AlertType.sort_roads(roads)
@@ -56,7 +56,7 @@ class TestAlertType(unittest.TestCase):
         assert AlertType.alert_locations("a", "b") == None
 
     def test_find_alert_location_1(self):
-        G = map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
+        G = Graph.create_map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
         node = -102069
 
         in_roads = G.in_edges(node, data=True)
@@ -69,7 +69,7 @@ class TestAlertType(unittest.TestCase):
         assert alert_location["bearing"] == 88.07327
 
     def test_find_alert_location_2(self):
-        G = map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
+        G = Graph.create_map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
         node = -102069
 
         in_roads = G.in_edges(node, data=True)
@@ -82,7 +82,7 @@ class TestAlertType(unittest.TestCase):
         assert alert_location["bearing"] == 320.88173
 
     def test_find_alert_location_3(self):
-        G = map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
+        G = Graph.create_map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
         node = -102067
 
         in_roads = G.in_edges(node, data=True)

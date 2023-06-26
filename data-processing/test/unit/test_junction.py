@@ -1,11 +1,11 @@
 from alert_types.junction import Junction
-from process_data import map_graph, Graph
+from graph import Graph
 import osmnx
 import unittest
 
 class TestJunction(unittest.TestCase):
     def test_roundabout_2_tert_1_rest1lane_1_unclass(self):
-        G = map_graph("test/osm-data/junction/roundabout_2_tert_1_rest1lane_1_unclass.osm")
+        G = Graph.create_map_graph("test/osm-data/junction/roundabout_2_tert_1_rest1lane_1_unclass.osm")
 
         alert_points = []
         for node in G.nodes:
@@ -14,7 +14,7 @@ class TestJunction(unittest.TestCase):
         assert len(alert_points) == 0
 
     def test_junction_unclass_oneway_into_secondary(self):
-        G = map_graph("test/osm-data/junction/junction_unclass_oneway_into_secondary.osm")
+        G = Graph.create_map_graph("test/osm-data/junction/junction_unclass_oneway_into_secondary.osm")
 
         alert_points = []
 
@@ -25,7 +25,7 @@ class TestJunction(unittest.TestCase):
         assert len(alert_points) == 1
 
     def test_junction_unclass_oneway_leaving_secondary(self):
-        G = map_graph("test/osm-data/junction/junction_unclass_oneway_leaving_secondary.osm")
+        G = Graph.create_map_graph("test/osm-data/junction/junction_unclass_oneway_leaving_secondary.osm")
 
         alert_points = []
         for node in G.nodes:
@@ -35,7 +35,7 @@ class TestJunction(unittest.TestCase):
         assert len(alert_points) == 0
 
     def test_junction_2_cuclass_intercept(self):
-        G = map_graph("test/osm-data/junction/junction_2_cuclass_intercept.osm")
+        G = Graph.create_map_graph("test/osm-data/junction/junction_2_cuclass_intercept.osm")
 
         alert_points = []
         for node in G.nodes:
@@ -45,7 +45,7 @@ class TestJunction(unittest.TestCase):
         assert len(alert_points) == 0
 
     def test_tert_1_lane_joining_resd(self):
-        G = map_graph("test/osm-data/junction/tert_1_lane_joining_resd.osm")
+        G = Graph.create_map_graph("test/osm-data/junction/tert_1_lane_joining_resd.osm")
 
         alert_points = []
         for node in G.nodes:

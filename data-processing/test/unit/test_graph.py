@@ -1,10 +1,10 @@
-from process_data import map_graph, Graph
+from graph import Graph
 import unittest
 
 class TestGraph(unittest.TestCase):
 
     def test_node_num_of_roads(self):
-        G = map_graph("test/osm-data/graph/map.osm")
+        G = Graph.create_map_graph("test/osm-data/graph/map.osm")
 
         assert G.node_num_of_roads(-101752) == 2
         assert G.node_num_of_roads(-101753) == 4
@@ -41,7 +41,7 @@ class TestGraph(unittest.TestCase):
         assert G.node_num_of_roads(-101829) == 1
 
     def test_node_part_of_roundabout(self):
-        G = map_graph("test/osm-data/graph/map_roundabout.osm")
+        G = Graph.create_map_graph("test/osm-data/graph/map_roundabout.osm")
 
         assert G.node_part_of_roundabout(-101905) == True
         assert G.node_part_of_roundabout(-101906) == True
@@ -96,7 +96,7 @@ class TestGraph(unittest.TestCase):
         assert G.node_part_of_roundabout(-101981) == True
 
     def test_node_alert_points_1(self):
-        G = map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
+        G = Graph.create_map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
         node = -102069
 
         alert_points = G.node_alert_points(node)
@@ -104,7 +104,7 @@ class TestGraph(unittest.TestCase):
         assert len(alert_points) == 2
 
     def test_node_alert_points_2(self):
-        G = map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
+        G = Graph.create_map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
         node = -102067
 
         alert_points = G.node_alert_points(node)
@@ -112,7 +112,7 @@ class TestGraph(unittest.TestCase):
         assert len(alert_points) == 2
 
     def test_node_alert_points_2(self):
-        G = map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
+        G = Graph.create_map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
         node = -102068
 
         alert_points = G.node_alert_points(node)
@@ -120,7 +120,7 @@ class TestGraph(unittest.TestCase):
         assert len(alert_points) == 0
 
     def test_all_alert_points(self):
-        G = map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
+        G = Graph.create_map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
 
         alert_points = G.all_alert_points()
 
