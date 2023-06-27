@@ -1,0 +1,25 @@
+<resources>
+    <!-- Reply Preference -->
+    <string-array name="reply_entries">
+        <item>Reply</item>
+        <item>Reply to all</item>
+    </string-array>
+
+    <string-array name="reply_values">
+        <item>reply</item>
+        <item>reply_all</item>
+    </string-array>
+
+    <!-- Alert Options-->
+    <string-array name="alert_options_display">
+        <item>Road Widens</item>
+        <item>Junction</item>
+    </string-array>
+
+    <string-array name="alert_options_values">
+        <item>road_widens</item>
+        <item>junction</item>
+    </string-array>
+
+
+</resources>
