@@ -1,20 +1,28 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <PreferenceCategory android:title="Alert Options">
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="switch_alerts_enable"
+        android:title="Driving Alerts" />
+    <PreferenceCategory android:title="Alert Types">
 
         <SwitchPreference
             android:defaultValue="true"
             android:key="switch_all_alerts"
-            android:title="All Alerts"
+            android:title="All Alerts Types"
+            app:dependency="switch_alerts_enable"
             app:disableDependentsState="true" />
 
-        <MultiSelectListPreference
-            android:defaultValue="@array/alert_options_display"
-            android:entries="@array/alert_options_display"
-            android:entryValues="@array/alert_options_values"
-            android:key="alert_options"
-            android:title="Select Alert Options"
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="switch_alert_type_10"
+            android:title="Road Widens"
+            app:dependency="switch_all_alerts" />
+        <SwitchPreference
+            android:defaultValue="true"
+            android:key="switch_alert_type_20"
+            android:title="Junction"
             app:dependency="switch_all_alerts" />
 
         <SeekBarPreference
@@ -24,12 +32,13 @@
             android:min="10"
             android:title="Minimum speed for alerts"
             app:allowDividerAbove="true"
+            app:dependency="switch_alerts_enable"
             app:showSeekBarValue="true"
             app:singleLineTitle="false"
             app:summary="When travelling below this speed alerts will not be created" />
 
-<!--        <TextView-->
-<!--            />-->
+        <!--        <TextView-->
+        <!--            />-->
 
     </PreferenceCategory>
 <!--    <PreferenceCategory app:title="@string/messages_header">-->
