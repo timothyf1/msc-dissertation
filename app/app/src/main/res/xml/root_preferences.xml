@@ -12,7 +12,9 @@
             android:key="switch_all_alerts"
             android:title="All Alerts Types"
             app:dependency="switch_alerts_enable"
-            app:disableDependentsState="true" />
+            app:disableDependentsState="true"
+            app:summaryOff="Select which alerts you would like to recieve below"
+            app:summaryOn="All Alert types are enabled" />
 
         <SwitchPreference
             android:defaultValue="true"

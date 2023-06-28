@@ -32,6 +32,8 @@ public class HomeFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
+    SharedPreferences sharedPreferences;
+
     private boolean active = false;
 
     private FragmentHomeBinding binding;
@@ -80,6 +82,7 @@ public class HomeFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
 
         binding.buttonSettings.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,15 +103,19 @@ public class HomeFragment extends Fragment {
         binding.buttonActivate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
                 if (active) {
                     binding.textStatus.setText("Inactive");
                     binding.buttonActivate.setText("Activate");
                     active = false;
+                    editor.putBoolean("switch_alerts_enable", false);
                 } else {
                     binding.textStatus.setText("Active");
                     binding.buttonActivate.setText("Deactivate");
                     active = true;
+                    editor.putBoolean("switch_alerts_enable", true);
                 }
+                editor.commit();
             }
         });
 
@@ -117,10 +124,17 @@ public class HomeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-//        SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
 
         int min_alert_speed = sharedPreferences.getInt("min_alert_speed", 0);
         binding.textViewTest.setText(String.valueOf(min_alert_speed));
+
+        boolean active = sharedPreferences.getBoolean("switch_alerts_enable", false);
+        if (active) {
+            binding.textStatus.setText("Active");
+            binding.buttonActivate.setText("Deactivate");
+        } else {
+            binding.textStatus.setText("Inactive");
+            binding.buttonActivate.setText("Activate");
+        }
     }
 }
