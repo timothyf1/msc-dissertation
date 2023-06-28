@@ -13,6 +13,7 @@ import androidx.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.gpssafetydrivingapp.databinding.FragmentHomeBinding;
 
@@ -109,11 +110,13 @@ public class HomeFragment extends Fragment {
                     binding.buttonActivate.setText("Activate");
                     active = false;
                     editor.putBoolean("switch_alerts_enable", false);
+//                    Toast.makeText(getActivity().getApplicationContext(), "Alerts are now inactive", Toast.LENGTH_SHORT).show();
                 } else {
                     binding.textStatus.setText("Active");
                     binding.buttonActivate.setText("Deactivate");
                     active = true;
                     editor.putBoolean("switch_alerts_enable", true);
+//                    Toast.makeText(getActivity().getApplicationContext(), "Alerts are now active", Toast.LENGTH_SHORT).show();
                 }
                 editor.commit();
             }

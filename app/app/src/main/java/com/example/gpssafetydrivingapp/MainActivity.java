@@ -20,11 +20,14 @@ import com.example.gpssafetydrivingapp.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
+
+    private SharedPreferences sharedPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
 //        PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false);
     }
@@ -64,10 +69,40 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+//    The
     @Override
     public boolean onSupportNavigateUp() {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Set up a listener whenever a key changes
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this::onSharedPreferenceChanged);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        // Unregister the listener whenever a key changes
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this::onSharedPreferenceChanged);
+    }
+
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,String key) {
+
+        switch (key) {
+            case "switch_alerts_enable":
+                boolean active = sharedPreferences.getBoolean("switch_alerts_enable", false);
+
+                if (active) {
+                    Toast.makeText(this.getApplicationContext(), "Alerts are active", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this.getApplicationContext(), "Alerts are inactive", Toast.LENGTH_SHORT).show();
+                }
+        }
+
     }
 }
