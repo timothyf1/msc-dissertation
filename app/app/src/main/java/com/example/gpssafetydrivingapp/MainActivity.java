@@ -1,5 +1,6 @@
 package com.example.gpssafetydrivingapp;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -13,6 +14,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.preference.PreferenceManager;
 
 import com.example.gpssafetydrivingapp.databinding.ActivityMainBinding;
 
@@ -37,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
+//        PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false);
     }
 
     @Override

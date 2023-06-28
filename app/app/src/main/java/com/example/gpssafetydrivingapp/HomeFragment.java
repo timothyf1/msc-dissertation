@@ -1,10 +1,14 @@
 package com.example.gpssafetydrivingapp;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.preference.PreferenceManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -107,5 +111,16 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+//        SharedPreferences sharedPreferences = getActivity().getPreferences(Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+
+        int min_alert_speed = sharedPreferences.getInt("min_alert_speed", 0);
+        binding.textViewTest.setText(String.valueOf(min_alert_speed));
     }
 }
