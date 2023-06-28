@@ -77,6 +77,10 @@ public class MainActivity extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
+    // Code to register and unregister an event listener on preference change
+    // This code was adapted from Stack Overflow post by thumbmunkeys 2010-09-26
+    // accessed 2023-06-28
+    // https://stackoverflow.com/a/3799894
     @Override
     protected void onResume() {
         super.onResume();
@@ -90,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
         // Unregister the listener whenever a key changes
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this::onSharedPreferenceChanged);
     }
+    // End of referenced code
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,String key) {
 
