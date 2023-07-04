@@ -2,15 +2,11 @@ package com.example.gpssafetydrivingapp;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import com.example.gpssafetydrivingapp.alerts.AlertChecker;
-import com.google.android.material.snackbar.Snackbar;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.view.View;
-
-import androidx.core.view.WindowCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -19,11 +15,8 @@ import androidx.preference.PreferenceManager;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
+import com.example.gpssafetydrivingapp.alerts.AlertChecker;
 import com.example.gpssafetydrivingapp.databinding.ActivityMainBinding;
-
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     private SharedPreferences sharedPreferences;
     private WorkManager mWorkManager;
+//    private FusedLocationProviderClient fusedLocationClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
 //        PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false);
 
         mWorkManager = WorkManager.getInstance(getApplicationContext());
+
     }
 
     @Override

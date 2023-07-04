@@ -40,7 +40,8 @@ final class WorkerUtils {
                 .setContentTitle("Driving Alerts are active")
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setVibrate(new long[0]);
+                .setVibrate(new long[0])
+                .setShowWhen(false);
 
         // Show the notification
         NotificationManagerCompat.from(context).notify(1, builder.build());
