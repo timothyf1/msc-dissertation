@@ -3,6 +3,7 @@ package com.example.gpssafetydrivingapp;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import com.example.gpssafetydrivingapp.alerts.AlertChecker;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,6 +16,8 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.example.gpssafetydrivingapp.databinding.ActivityMainBinding;
 
@@ -28,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
 
     private SharedPreferences sharedPreferences;
+    private WorkManager mWorkManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,8 @@ public class MainActivity extends AppCompatActivity {
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
 
 //        PreferenceManager.setDefaultValues(this, R.xml.root_preferences, false);
+
+        mWorkManager = WorkManager.getInstance(getApplicationContext());
     }
 
     @Override
@@ -103,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 boolean active = sharedPreferences.getBoolean("switch_alerts_enable", false);
 
                 if (active) {
-                    Toast.makeText(this.getApplicationContext(), "Alerts are active", Toast.LENGTH_SHORT).show();
+                    mWorkManager.enqueue(OneTimeWorkRequest.from(AlertChecker.class));
                 } else {
                     Toast.makeText(this.getApplicationContext(), "Alerts are inactive", Toast.LENGTH_SHORT).show();
                 }
