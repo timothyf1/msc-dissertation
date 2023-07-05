@@ -12,7 +12,7 @@ import androidx.core.app.NotificationManagerCompat;
 
 final class WorkerUtils {
 
-    static void makeStatusNotification(String message, Context context) {
+    static void makeStatusNotification(String message, Context context, int id) {
 
         // Make a channel if necessary
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -44,7 +44,7 @@ final class WorkerUtils {
                 .setShowWhen(false);
 
         // Show the notification
-        NotificationManagerCompat.from(context).notify(6, builder.build());
+        NotificationManagerCompat.from(context).notify(id, builder.build());
     }
 
 }

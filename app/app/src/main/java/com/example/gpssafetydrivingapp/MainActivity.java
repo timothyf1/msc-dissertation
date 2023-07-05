@@ -54,6 +54,10 @@ public class MainActivity extends AppCompatActivity {
 
         mWorkManager = WorkManager.getInstance(getApplicationContext());
 
+        // Start alert checker if enabled in preferences
+        if (sharedPreferences.getBoolean("switch_alerts_enable", false)) {
+            startAlertChecker();
+        }
     }
 
     @Override
@@ -139,11 +143,24 @@ public class MainActivity extends AppCompatActivity {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            return false;
+            return;
         }
         NotificationManagerCompat.from(context).notify(1, builder.build());
-//        NotificationManagerCompat.from(context).
-        return true;
+    }
+
+    private void startAlertChecker() {
+        Intent stopAlertIntent = new Intent(this, AlertStopActionReceiver.class);
+        stopAlertIntent.putExtra("action","stopAlerts");
+
+        PendingIntent stopAlertPendingIntent = PendingIntent.getBroadcast(this, 0, stopAlertIntent, PendingIntent.FLAG_IMMUTABLE);
+
+        makeAlertActiveNotification(getApplicationContext(), stopAlertPendingIntent);
+        mWorkManager.enqueue(OneTimeWorkRequest.from(AlertChecker.class));
+    }
+
+    private void stopAlertChecker() {
+        NotificationManagerCompat.from(getApplicationContext()).cancel(1);
+        mWorkManager.cancelAllWork();
     }
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,String key) {
@@ -153,10 +170,9 @@ public class MainActivity extends AppCompatActivity {
                 boolean active = sharedPreferences.getBoolean("switch_alerts_enable", false);
 
                 if (active) {
-                    makeAlertActiveNotification(getApplicationContext());
-                    mWorkManager.enqueue(OneTimeWorkRequest.from(AlertChecker.class));
+                    startAlertChecker();
                 } else {
-                    NotificationManagerCompat.from(getApplicationContext()).cancel(1);
+                    stopAlertChecker();
                     Toast.makeText(this.getApplicationContext(), "Alerts are inactive", Toast.LENGTH_SHORT).show();
                 }
         }
