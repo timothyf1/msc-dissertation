@@ -1,34 +1,53 @@
 package com.example.gpssafetydrivingapp.alerts;
 
 import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Location;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
-import androidx.work.Worker;
-import androidx.work.WorkerParameters;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.preference.PreferenceManager;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
-import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.location.Priority;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.example.gpssafetydrivingapp.R;
 
-public class AlertChecker extends Worker {
+public class AlertChecker {
 
-    private FusedLocationProviderClient fusedLocationClient;
+    private static void makeAlertActiveNotification(Context context, PendingIntent stopAlertPendingIntent) {
 
-    public AlertChecker(Context appContext, WorkerParameters workerParams) {
-        super(appContext, workerParams);
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
-    }
+        // Make a channel if necessary
+        CharSequence name = "Driving Alerts Active";
+        String description = "Notification shown when alerts are active";
+        int importance = NotificationManager.IMPORTANCE_LOW;
+        NotificationChannel channel =
+                new NotificationChannel("ALERTS_ACTIVE", name, importance);
+        channel.setDescription(description);
 
-    @Override
-    public Result doWork() {
-//        Toast.makeText(getApplicationContext(), "Test", Toast.LENGTH_SHORT);
-        if (ActivityCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this.getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        // Add the channel
+        NotificationManager notificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (notificationManager != null) {
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        // Create the notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "ALERTS_ACTIVE")
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle("Driving Alerts are active")
+                .setContentText("")
+                .setOngoing(true)
+                .addAction(0, "Stop Alerts", stopAlertPendingIntent);
+
+        // Show the notification
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -36,24 +55,30 @@ public class AlertChecker extends Worker {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-            return Result.failure();
+            return;
         }
+        NotificationManagerCompat.from(context).notify(1, builder.build());
+    }
 
-        Task<Location> taskLocation = fusedLocationClient.getCurrentLocation(Priority.PRIORITY_LOW_POWER, null);
+    public static void startAlertChecker(Context context) {
+        Intent stopAlertIntent = new Intent(context, AlertStopActionReceiver.class);
+        stopAlertIntent.putExtra("action","stopAlerts");
 
-        taskLocation.addOnCompleteListener((new OnCompleteListener<Location>() {
-            @Override
-            public void onComplete(@NonNull Task<Location> task) {
-                Location location = task.getResult();
-                String out = "Latitude: " + String.valueOf(location.getLatitude()) +
-                        "\nLongitude" + String.valueOf(location.getLongitude()) +
-                        "\nBearing" + String.valueOf(location.getBearing());
-                WorkerUtils.makeStatusNotification(out, getApplicationContext());
-            }
-        }));
+        PendingIntent stopAlertPendingIntent = PendingIntent.getBroadcast(context, 0, stopAlertIntent, PendingIntent.FLAG_IMMUTABLE);
 
-        return Result.success();
+        makeAlertActiveNotification(context, stopAlertPendingIntent);
+
+        WorkManager.getInstance(context).enqueue(OneTimeWorkRequest.from(AlertCheckerWorker.class));
+    }
+
+    public static void stopAlertChecker(Context context) {
+        NotificationManagerCompat.from(context).cancel(1);
+        WorkManager.getInstance(context).cancelAllWork();
+
+        // Update preferences
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        editor.putBoolean("switch_alerts_enable", false);
+        editor.commit();
     }
 
 }
-
