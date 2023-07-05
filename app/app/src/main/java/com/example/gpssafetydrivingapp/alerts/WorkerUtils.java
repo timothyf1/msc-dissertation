@@ -20,7 +20,7 @@ final class WorkerUtils {
             // the NotificationChannel class is new and not in the support library
             CharSequence name = "Driving Alerts";
             String description = "Show notification when alerts are active";
-            int importance = NotificationManager.IMPORTANCE_HIGH;
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel =
                     new NotificationChannel("ALERTS", name, importance);
             channel.setDescription(description);
@@ -37,14 +37,14 @@ final class WorkerUtils {
         // Create the notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "ALERTS")
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
-                .setContentTitle("Driving Alerts are active")
+                .setContentTitle("Test location")
                 .setContentText(message)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setVibrate(new long[0])
                 .setShowWhen(false);
 
         // Show the notification
-        NotificationManagerCompat.from(context).notify(1, builder.build());
+        NotificationManagerCompat.from(context).notify(6, builder.build());
     }
 
 }

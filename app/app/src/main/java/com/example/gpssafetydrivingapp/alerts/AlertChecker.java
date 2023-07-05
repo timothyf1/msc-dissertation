@@ -54,5 +54,6 @@ public class AlertChecker extends Worker {
 
         return Result.success();
     }
+
 }
 

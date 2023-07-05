@@ -1,12 +1,20 @@
 package com.example.gpssafetydrivingapp;
 
+import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -97,6 +105,47 @@ public class MainActivity extends AppCompatActivity {
     }
     // End of referenced code
 
+    private static boolean makeAlertActiveNotification(Context context) {
+
+        // Make a channel if necessary
+        CharSequence name = "Driving Alerts Active";
+        String description = "Notification shown when alerts are active";
+        int importance = NotificationManager.IMPORTANCE_LOW;
+        NotificationChannel channel =
+                new NotificationChannel("ALERTS_ACTIVE", name, importance);
+        channel.setDescription(description);
+
+        // Add the channel
+        NotificationManager notificationManager =
+                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        if (notificationManager != null) {
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        // Create the notification
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "ALERTS_ACTIVE")
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setContentTitle("Driving Alerts are active")
+                .setContentText("")
+                .setOngoing(true);
+
+        // Show the notification
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return false;
+        }
+        NotificationManagerCompat.from(context).notify(1, builder.build());
+//        NotificationManagerCompat.from(context).
+        return true;
+    }
+
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,String key) {
 
         switch (key) {
@@ -104,8 +153,10 @@ public class MainActivity extends AppCompatActivity {
                 boolean active = sharedPreferences.getBoolean("switch_alerts_enable", false);
 
                 if (active) {
+                    makeAlertActiveNotification(getApplicationContext());
                     mWorkManager.enqueue(OneTimeWorkRequest.from(AlertChecker.class));
                 } else {
+                    NotificationManagerCompat.from(getApplicationContext()).cancel(1);
                     Toast.makeText(this.getApplicationContext(), "Alerts are inactive", Toast.LENGTH_SHORT).show();
                 }
         }
