@@ -28,6 +28,7 @@ import java.util.concurrent.TimeUnit;
 public class AlertCheckerWorker extends Worker {
 
     private FusedLocationProviderClient fusedLocationClient;
+    private LocationManager locationManager;
     private SharedPreferences sharedPreferences;
     int count = 100;
     int nullLocationCount;
@@ -35,6 +36,7 @@ public class AlertCheckerWorker extends Worker {
     public AlertCheckerWorker(Context appContext, WorkerParameters workerParams) {
         super(appContext, workerParams);
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
+        locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
     }
 
@@ -65,7 +67,7 @@ public class AlertCheckerWorker extends Worker {
             // This code was adapted from Stack Overflow post by Sunny 2019-09-26
             // accessed 2023-07-07
             // https://stackoverflow.com/a/58109400
-            if (! LocationManagerCompat.isLocationEnabled((LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE))) {
+            if (! LocationManagerCompat.isLocationEnabled(locationManager)) {
                 WorkerUtils.makeStatusNotification("Location is unavailable", "Alerts have been turned off", getApplicationContext(), 57);
                 Log.e("Alert Checker", "Location is unavailable");
                 AlertChecker.stopAlertChecker(getApplicationContext());
