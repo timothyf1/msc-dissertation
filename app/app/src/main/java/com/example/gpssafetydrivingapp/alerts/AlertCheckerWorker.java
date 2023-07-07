@@ -21,7 +21,6 @@ import com.google.android.gms.location.Granularity;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 
 import java.util.concurrent.TimeUnit;
@@ -31,7 +30,7 @@ public class AlertCheckerWorker extends Worker {
     private FusedLocationProviderClient fusedLocationClient;
     private SharedPreferences sharedPreferences;
     int count = 100;
-    int nullLoacationCount;
+    int nullLocationCount;
 
     public AlertCheckerWorker(Context appContext, WorkerParameters workerParams) {
         super(appContext, workerParams);
@@ -55,7 +54,7 @@ public class AlertCheckerWorker extends Worker {
             return Result.failure();
         }
 
-        nullLoacationCount = 0;
+        nullLocationCount = 0;
 
         while (sharedPreferences.getBoolean("switch_alerts_enable", false)) {
 
@@ -75,16 +74,14 @@ public class AlertCheckerWorker extends Worker {
 
             Log.d("Alert Checker", "Location Enabled");
 
-            Task<Location> taskLocation = fusedLocationClient.getCurrentLocation(Priority.PRIORITY_LOW_POWER, null);
-            fusedLocationClient.flushLocations();
+            CurrentLocationRequest currentLocationRequest = new CurrentLocationRequest.Builder()
+                    .setMaxUpdateAgeMillis(1)
+                    .setGranularity(Granularity.GRANULARITY_FINE)
+                    .setPriority(Priority.PRIORITY_BALANCED_POWER_ACCURACY)
+                    .build();
 
-            taskLocation.addOnFailureListener((new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    AlertChecker.stopAlertChecker(getApplicationContext());
-                    WorkerUtils.makeStatusNotification("Location failed", "Alerts have been turned off", getApplicationContext(), 57);
-                }
-            }));
+            Task<Location> taskLocation = fusedLocationClient.getCurrentLocation(currentLocationRequest, null);
+            fusedLocationClient.flushLocations();
 
             taskLocation.addOnCompleteListener((new OnCompleteListener<Location>() {
                 @Override
@@ -93,7 +90,8 @@ public class AlertCheckerWorker extends Worker {
                     Log.d("Alert Checker", "Running Location complete");
 
                     if (location != null) {
-                        String out = count++ + "Latitude: " + location.getLatitude() +
+                        String out = count++ + " " + location.getTime() +
+                                " Latitude: " + location.getLatitude() +
                                 " Longitude: " + location.getLongitude() +
                                 " Bearing:" + location.getBearing() +
                                 " Speed: " + location.getSpeed();
@@ -101,8 +99,8 @@ public class AlertCheckerWorker extends Worker {
                         WorkerUtils.makeStatusNotification("Alert Checker", out, getApplicationContext(), 56);
                     } else {
                         Log.e("Alert Checker", "Location is null");
-                        nullLoacationCount++;
-                        if (nullLoacationCount > 10) {
+                        nullLocationCount++;
+                        if (nullLocationCount > 10) {
                             AlertChecker.stopAlertChecker(getApplicationContext());
                         }
                     }
