@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.util.Log;
 
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
@@ -61,6 +62,8 @@ public class AlertChecker {
     }
 
     public static void startAlertChecker(Context context) {
+
+        Log.d("Alert Checker", "Starting alert checker");
         Intent stopAlertIntent = new Intent(context, AlertStopActionReceiver.class);
         stopAlertIntent.putExtra("action","stopAlerts");
 
@@ -69,9 +72,11 @@ public class AlertChecker {
         makeAlertActiveNotification(context, stopAlertPendingIntent);
 
         WorkManager.getInstance(context).enqueue(OneTimeWorkRequest.from(AlertCheckerWorker.class));
+        Log.d("Alert Checker", "Alert checker started");
     }
 
     public static void stopAlertChecker(Context context) {
+        Log.d("Alert Checker", "Stopping alert checker");
         NotificationManagerCompat.from(context).cancel(1);
         WorkManager.getInstance(context).cancelAllWork();
 
@@ -79,6 +84,8 @@ public class AlertChecker {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
         editor.putBoolean("switch_alerts_enable", false);
         editor.commit();
+
+        Log.d("Alert Checker", "Alert checker stopped");
     }
 
 }
