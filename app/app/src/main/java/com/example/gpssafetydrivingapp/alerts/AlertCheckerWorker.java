@@ -54,6 +54,11 @@ public class AlertCheckerWorker extends Worker {
         while (sharedPreferences.getBoolean("switch_alerts_enable", false)) {
 
             // Check to see if location has been turned off
+
+            // Code to check is location is enabled in if statement
+            // This code was adapted from Stack Overflow post by Sunny 2019-09-26
+            // accessed 2023-07-07
+            // https://stackoverflow.com/a/58109400
             if (! LocationManagerCompat.isLocationEnabled((LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE))) {
                 WorkerUtils.makeStatusNotification("Location is unavailable", "Alerts have been turned off", getApplicationContext(), 57);
                 AlertChecker.stopAlertChecker(getApplicationContext());
