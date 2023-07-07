@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Looper;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -15,9 +17,7 @@ import androidx.preference.PreferenceManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
-import com.google.android.gms.location.CurrentLocationRequest;
 import com.google.android.gms.location.FusedLocationProviderClient;
-import com.google.android.gms.location.Granularity;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -76,14 +76,18 @@ public class AlertCheckerWorker extends Worker {
 
             Log.d("Alert Checker", "Location Enabled");
 
-            CurrentLocationRequest currentLocationRequest = new CurrentLocationRequest.Builder()
-                    .setMaxUpdateAgeMillis(1)
-                    .setGranularity(Granularity.GRANULARITY_FINE)
-                    .setPriority(Priority.PRIORITY_BALANCED_POWER_ACCURACY)
-                    .build();
+            LocationListener locationListener = new LocationListener() {
+                @Override
+                public void onLocationChanged(@NonNull Location location) {
+                }
+            };
 
-            Task<Location> taskLocation = fusedLocationClient.getCurrentLocation(currentLocationRequest, null);
-            fusedLocationClient.flushLocations();
+            Looper looper = Looper.getMainLooper();
+
+            locationManager.requestLocationUpdates(
+                    LocationManager.GPS_PROVIDER, 5000, 10, locationListener, looper);
+
+            Task<Location> taskLocation = fusedLocationClient.getCurrentLocation(Priority.PRIORITY_LOW_POWER, null);
 
             taskLocation.addOnCompleteListener((new OnCompleteListener<Location>() {
                 @Override
