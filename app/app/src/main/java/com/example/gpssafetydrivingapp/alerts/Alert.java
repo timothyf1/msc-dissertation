@@ -46,6 +46,10 @@ public class Alert {
         return Integer.parseInt(node);
     }
 
+    public boolean checkBearing(double currentBearing) {
+        return Math.abs(currentBearing - Double.parseDouble(bearing)) < 75;
+    }
+
     public double distance(LatLng currentLocation) {
         LatLng alertLocation = new LatLng(getLatitude(), getLongitude());
         return LatLngTool.distance(currentLocation, alertLocation, LengthUnit.METER);

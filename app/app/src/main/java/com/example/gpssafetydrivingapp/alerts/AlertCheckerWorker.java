@@ -120,6 +120,11 @@ public class AlertCheckerWorker extends Worker {
 
                         if (!Objects.equals(nearest.getId(), "-1")) {
                             Log.d("AlertCheckerWorker", "Nearest Alert id: " + nearest.getId());
+                            if (nearest.checkBearing(location.getBearing())) {
+                                Log.d("AlertCheckerWorker", "Bearing is valid for alert point");
+                            } else {
+                                Log.d("AlertCheckerWorker", "Bearing is invalid for alert point");
+                            }
                         } else {
                             Log.d("AlertCheckerWorker", "Could not alert point within 40 meters");
                         }
@@ -161,6 +166,7 @@ public class AlertCheckerWorker extends Worker {
             return null;
         }
     }
+
     private Alert findNearest(double lat, double lon, int maxDistance) {
         double current_nearest_distance = maxDistance;
         Alert current_nearest_alert = new Alert("-1", 0, 0, 0, 0, 0);
