@@ -24,7 +24,6 @@ import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
-import com.javadocmd.simplelatlng.LatLng;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,10 +32,10 @@ import java.util.concurrent.TimeUnit;
 
 public class AlertCheckerWorker extends Worker {
 
-    private FusedLocationProviderClient fusedLocationClient;
-    private LocationManager locationManager;
-    private SharedPreferences sharedPreferences;
-    private Context context;
+    private final FusedLocationProviderClient fusedLocationClient;
+    private final LocationManager locationManager;
+    private final SharedPreferences sharedPreferences;
+    private final Context context;
     private Alerts alerts;
     int count = 100;
     int nullLocationCount;
@@ -69,77 +68,25 @@ public class AlertCheckerWorker extends Worker {
 
         Log.d("AlertCheckerWorker", "Loading alert points");
         alerts = loadAlertPoints();
-        Log.d("AlertCheckerWorker",  alerts.getNumberOfAlerts() + " alert points loaded");
+        Log.d("AlertCheckerWorker", alerts.getNumberOfAlerts() + " alert points loaded");
 
         while (sharedPreferences.getBoolean("switch_alerts_enable", false)) {
-
-            Log.d("AlertCheckerWorker", "Check to see if location is enabled");
-            // Check to see if location has been turned off
 
             // Code to check is location is enabled in if statement
             // This code was adapted from Stack Overflow post by Sunny 2019-09-26
             // accessed 2023-07-07
             // https://stackoverflow.com/a/58109400
-            if (! LocationManagerCompat.isLocationEnabled(locationManager)) {
+            if (!LocationManagerCompat.isLocationEnabled(locationManager)) {
                 WorkerUtils.makeStatusNotification("Location is unavailable", "Alerts have been turned off", getApplicationContext(), 57);
                 Log.e("AlertCheckerWorker", "Location is unavailable");
-                AlertChecker.stopAlertChecker(getApplicationContext());
-                return Result.success();
+                return Result.failure();
             }
-
             Log.d("AlertCheckerWorker", "Location Enabled");
 
-            LocationListener locationListener = new LocationListener() {
-                @Override
-                public void onLocationChanged(@NonNull Location location) {
-                }
-            };
+            // Run an alert check
+            alertCheck();
 
-            Looper looper = Looper.getMainLooper();
-
-            locationManager.requestLocationUpdates(
-                    LocationManager.GPS_PROVIDER, 5000, 10, locationListener, looper);
-
-            Task<Location> taskLocation = fusedLocationClient.getCurrentLocation(Priority.PRIORITY_LOW_POWER, null);
-
-            taskLocation.addOnCompleteListener((new OnCompleteListener<Location>() {
-                @Override
-                public void onComplete(@NonNull Task<Location> task) {
-                    Location location = task.getResult();
-                    Log.d("AlertCheckerWorker", "Running Location complete");
-
-                    if (location != null) {
-                        String out = count++ + " " + location.getTime() +
-                                " Latitude: " + location.getLatitude() +
-                                " Longitude: " + location.getLongitude() +
-                                " Bearing:" + location.getBearing() +
-                                " Speed: " + location.getSpeed();
-                        Log.d("AlertCheckerWorker", out);
-
-                        Alert nearest = findNearest(location.getLatitude(), location.getLongitude(), 40);
-
-                        if (!Objects.equals(nearest.getId(), "-1")) {
-                            Log.d("AlertCheckerWorker", "Nearest Alert id: " + nearest.getId());
-                            if (nearest.checkBearing(location.getBearing())) {
-                                Log.d("AlertCheckerWorker", "Bearing is valid for alert point");
-                            } else {
-                                Log.d("AlertCheckerWorker", "Bearing is invalid for alert point");
-                            }
-                        } else {
-                            Log.d("AlertCheckerWorker", "Could not alert point within 40 meters");
-                        }
-
-//                        WorkerUtils.makeStatusNotification("Alert Checker", out, getApplicationContext(), 56);
-                    } else {
-                        Log.e("AlertCheckerWorker", "Location is null");
-                        nullLocationCount++;
-                        if (nullLocationCount > 10) {
-                            AlertChecker.stopAlertChecker(getApplicationContext());
-                        }
-                    }
-                }
-            }));
-
+            // Timer before next location check
             try {
                 TimeUnit.SECONDS.sleep(3);
             } catch (InterruptedException e) {
@@ -151,7 +98,7 @@ public class AlertCheckerWorker extends Worker {
     }
 
     private Alerts loadAlertPoints() {
-        String myJson=inputStreamToString(context.getResources().openRawResource(R.raw.alerts_silchester));
+        String myJson = inputStreamToString(context.getResources().openRawResource(R.raw.alerts_silchester));
         return new Gson().fromJson(myJson, Alerts.class);
     }
 
@@ -160,29 +107,63 @@ public class AlertCheckerWorker extends Worker {
         try {
             byte[] bytes = new byte[inputStream.available()];
             inputStream.read(bytes, 0, bytes.length);
-            String json = new String(bytes);
-            return json;
+            return new String(bytes);
         } catch (IOException e) {
             return null;
         }
     }
 
-    private Alert findNearest(double lat, double lon, int maxDistance) {
-        double current_nearest_distance = maxDistance;
-        Alert current_nearest_alert = new Alert("-1", 0, 0, 0, 0, 0);
+    private boolean alertCheck() {
 
-        LatLng current_location = new LatLng(lat, lon);
+        LocationListener locationListener = location -> {};
+        Looper looper = Looper.getMainLooper();
 
-        for (Alert alert: alerts.getAlerts() ) {
-            double distance = alert.distance(current_location);
+        // Force location update
+        locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER, 5000, 10, locationListener, looper);
 
-            if (distance < current_nearest_distance) {
-                current_nearest_alert = alert;
-                current_nearest_distance = distance;
+        Task<Location> taskLocation = fusedLocationClient.getCurrentLocation(Priority.PRIORITY_LOW_POWER, null);
+
+        taskLocation.addOnCompleteListener(this::onLocationAcquired);
+
+        return true;
+    }
+
+    private void onLocationAcquired(@NonNull Task<Location> task) {
+        Location location = task.getResult();
+        Log.d("AlertCheckerWorker", "Running Location complete");
+
+        if (location == null) {
+            nullLocationCount++;
+            Log.e("AlertCheckerWorker", "Location is null, current null location count " + nullLocationCount);
+            if (nullLocationCount > 10) {
+                AlertChecker.stopAlertChecker(getApplicationContext());
             }
+            return;
         }
+        Log.d("AlertCheckerWorker", count++ + " " + location.getTime() +
+                " Latitude: " + location.getLatitude() +
+                " Longitude: " + location.getLongitude() +
+                " Bearing:" + location.getBearing() +
+                " Speed: " + location.getSpeed());
 
-        return current_nearest_alert;
+        Alert nearestAlert = alerts.findNearest(location.getLatitude(), location.getLongitude(), 40);
+
+        // Check to see if there is a alert found
+        if (Objects.equals(nearestAlert.getId(), "-1")) {
+            Log.d("AlertCheckerWorker", "Could not alert point within 40 meters");
+            return;
+        }
+        Log.d("AlertCheckerWorker", "Nearest Alert id: " + nearestAlert.getId());
+
+        // Check the direction of travel to the direction of the alert
+        if (!nearestAlert.checkBearing(location.getBearing())) {
+            Log.d("AlertCheckerWorker", "Bearing is invalid for alert point");
+            return;
+        }
+        Log.d("AlertCheckerWorker", "Bearing is valid for alert point");
+
+
     }
 
 }
