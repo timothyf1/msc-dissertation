@@ -3,6 +3,7 @@ package com.example.gpssafetydrivingapp.alerts;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 public class AlertStopActionReceiver extends BroadcastReceiver {
 
@@ -12,6 +13,7 @@ public class AlertStopActionReceiver extends BroadcastReceiver {
         String action=intent.getStringExtra("action");
 
         if (action.equals("stopAlerts")) {
+            Log.d("AlertCheckerActionReceiver", "Stop action received from notification");
             AlertChecker.stopAlertChecker(context);
         }
     }

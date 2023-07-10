@@ -60,7 +60,7 @@ public class AlertCheckerWorker extends Worker {
 
         while (sharedPreferences.getBoolean("switch_alerts_enable", false)) {
 
-            Log.d("Alert Checker", "Check to see if location is enabled");
+            Log.d("AlertCheckerWorker", "Check to see if location is enabled");
             // Check to see if location has been turned off
 
             // Code to check is location is enabled in if statement
@@ -69,12 +69,12 @@ public class AlertCheckerWorker extends Worker {
             // https://stackoverflow.com/a/58109400
             if (! LocationManagerCompat.isLocationEnabled(locationManager)) {
                 WorkerUtils.makeStatusNotification("Location is unavailable", "Alerts have been turned off", getApplicationContext(), 57);
-                Log.e("Alert Checker", "Location is unavailable");
+                Log.e("AlertCheckerWorker", "Location is unavailable");
                 AlertChecker.stopAlertChecker(getApplicationContext());
                 return Result.success();
             }
 
-            Log.d("Alert Checker", "Location Enabled");
+            Log.d("AlertCheckerWorker", "Location Enabled");
 
             LocationListener locationListener = new LocationListener() {
                 @Override
@@ -93,7 +93,7 @@ public class AlertCheckerWorker extends Worker {
                 @Override
                 public void onComplete(@NonNull Task<Location> task) {
                     Location location = task.getResult();
-                    Log.d("Alert Checker", "Running Location complete");
+                    Log.d("AlertCheckerWorker", "Running Location complete");
 
                     if (location != null) {
                         String out = count++ + " " + location.getTime() +
@@ -101,10 +101,10 @@ public class AlertCheckerWorker extends Worker {
                                 " Longitude: " + location.getLongitude() +
                                 " Bearing:" + location.getBearing() +
                                 " Speed: " + location.getSpeed();
-                        Log.d("Alert Checker", out);
+                        Log.d("AlertCheckerWorker", out);
                         WorkerUtils.makeStatusNotification("Alert Checker", out, getApplicationContext(), 56);
                     } else {
-                        Log.e("Alert Checker", "Location is null");
+                        Log.e("AlertCheckerWorker", "Location is null");
                         nullLocationCount++;
                         if (nullLocationCount > 10) {
                             AlertChecker.stopAlertChecker(getApplicationContext());
@@ -124,4 +124,3 @@ public class AlertCheckerWorker extends Worker {
     }
 
 }
-
