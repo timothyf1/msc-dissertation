@@ -24,6 +24,7 @@ import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.gson.Gson;
+import com.javadocmd.simplelatlng.LatLng;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -116,6 +117,13 @@ public class AlertCheckerWorker extends Worker {
                         Log.d("AlertCheckerWorker", out);
 
                         Alert nearest = findNearest(location.getLatitude(), location.getLongitude(), 40);
+
+                        if (!Objects.equals(nearest.getId(), "-1")) {
+                            Log.d("AlertCheckerWorker", "Nearest Alert id: " + nearest.getId());
+                        } else {
+                            Log.d("AlertCheckerWorker", "Could not alert point within 40 meters");
+                        }
+
 //                        WorkerUtils.makeStatusNotification("Alert Checker", out, getApplicationContext(), 56);
                     } else {
                         Log.e("AlertCheckerWorker", "Location is null");
@@ -153,4 +161,22 @@ public class AlertCheckerWorker extends Worker {
             return null;
         }
     }
+    private Alert findNearest(double lat, double lon, int maxDistance) {
+        double current_nearest_distance = maxDistance;
+        Alert current_nearest_alert = new Alert("-1", 0, 0, 0, 0, 0);
+
+        LatLng current_location = new LatLng(lat, lon);
+
+        for (Alert alert: alerts.getAlerts() ) {
+            double distance = alert.distance(current_location);
+
+            if (distance < current_nearest_distance) {
+                current_nearest_alert = alert;
+                current_nearest_distance = distance;
+            }
+        }
+
+        return current_nearest_alert;
+    }
+
 }

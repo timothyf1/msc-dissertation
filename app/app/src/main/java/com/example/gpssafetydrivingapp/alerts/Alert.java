@@ -1,5 +1,9 @@
 package com.example.gpssafetydrivingapp.alerts;
 
+import com.javadocmd.simplelatlng.LatLng;
+import com.javadocmd.simplelatlng.LatLngTool;
+import com.javadocmd.simplelatlng.util.LengthUnit;
+
 public class Alert {
 
     private final String id;
@@ -41,5 +45,9 @@ public class Alert {
     public int getNode() {
         return Integer.parseInt(node);
     }
+
+    public double distance(LatLng currentLocation) {
+        LatLng alertLocation = new LatLng(getLatitude(), getLongitude());
+        return LatLngTool.distance(currentLocation, alertLocation, LengthUnit.METER);
     }
 }
