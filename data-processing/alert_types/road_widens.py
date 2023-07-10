@@ -13,6 +13,6 @@ class RoadWidens(AlertType):
 
             if len(in_road_lanes["single"]) > 0 and len(out_road_lanes["multi"]) > 0:
                 location = AlertType.find_alert_location(G, node, in_road_lanes["single"][0], 50)
-                return [AlertType.create_alert(1, node, location)]
+                return [AlertType.create_alert(10, node, location)]
 
         return []

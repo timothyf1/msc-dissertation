@@ -1,5 +1,6 @@
 package com.example.gpssafetydrivingapp.alerts;
 
+import com.google.gson.annotations.SerializedName;
 import com.javadocmd.simplelatlng.LatLng;
 import com.javadocmd.simplelatlng.LatLngTool;
 import com.javadocmd.simplelatlng.util.LengthUnit;
@@ -7,6 +8,7 @@ import com.javadocmd.simplelatlng.util.LengthUnit;
 public class Alert {
 
     private final String id;
+    @SerializedName("type")
     private final String alertType;
     private final String node;
     private final String latitude;

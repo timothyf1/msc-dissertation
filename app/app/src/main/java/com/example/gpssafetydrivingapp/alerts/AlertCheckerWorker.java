@@ -163,7 +163,31 @@ public class AlertCheckerWorker extends Worker {
         }
         Log.d("AlertCheckerWorker", "Bearing is valid for alert point");
 
+        createAlert(nearestAlert);
+    }
 
+    private void createAlert(Alert alertPoint) {
+        Log.d("AlertCheckerWorker", "Alert type: " + alertPoint.getAlertType());
+
+        String alertText;
+        String driveOn = "left";
+
+        switch (alertPoint.getAlertType()) {
+            case 10:
+                alertText = "Caution, the road becomes wider ahead. Keep " + driveOn;
+                break;
+            case 20:
+                alertText = "Caution, junction ahead with wider road. Keep " + driveOn;
+                break;
+            default:
+                return;
+        }
+
+        Log.d("AlertCheckerWorker", "Alert text: " + alertText);
+
+        Log.d("AlertCheckerWorker", "Creating alert notification");
+
+        WorkerUtils.makeStatusNotification("Danger Ahead", alertText, context, 667);
     }
 
 }
