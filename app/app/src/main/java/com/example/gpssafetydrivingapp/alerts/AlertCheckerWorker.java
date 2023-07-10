@@ -36,9 +36,11 @@ public class AlertCheckerWorker extends Worker {
     private final LocationManager locationManager;
     private final SharedPreferences sharedPreferences;
     private final Context context;
+
     private Alerts alerts;
-    int count = 100;
-    int nullLocationCount;
+    private Alert lastAlert;
+    private int count = 100;
+    private int nullLocationCount;
 
     public AlertCheckerWorker(Context appContext, WorkerParameters workerParams) {
         super(appContext, workerParams);
@@ -163,6 +165,12 @@ public class AlertCheckerWorker extends Worker {
         }
         Log.d("AlertCheckerWorker", "Bearing is valid for alert point");
 
+        if (lastAlert == nearestAlert) {
+            Log.d("AlertCheckerWorker", "Nearest Alert is the last activated alert. Skipping making alert");
+            return;
+        }
+        
+        lastAlert = nearestAlert;
         createAlert(nearestAlert);
     }
 
