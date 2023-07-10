@@ -17,12 +17,17 @@ import androidx.preference.PreferenceManager;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 
+import com.example.gpssafetydrivingapp.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.gson.Gson;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 public class AlertCheckerWorker extends Worker {
@@ -30,6 +35,8 @@ public class AlertCheckerWorker extends Worker {
     private FusedLocationProviderClient fusedLocationClient;
     private LocationManager locationManager;
     private SharedPreferences sharedPreferences;
+    private Context context;
+    private Alerts alerts;
     int count = 100;
     int nullLocationCount;
 
@@ -38,6 +45,7 @@ public class AlertCheckerWorker extends Worker {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
         locationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getApplicationContext());
+        context = appContext;
     }
 
     @NonNull
@@ -57,6 +65,10 @@ public class AlertCheckerWorker extends Worker {
         }
 
         nullLocationCount = 0;
+
+        Log.d("AlertCheckerWorker", "Loading alert points");
+        alerts = loadAlertPoints();
+        Log.d("AlertCheckerWorker",  alerts.getNumberOfAlerts() + " alert points loaded");
 
         while (sharedPreferences.getBoolean("switch_alerts_enable", false)) {
 
@@ -102,7 +114,9 @@ public class AlertCheckerWorker extends Worker {
                                 " Bearing:" + location.getBearing() +
                                 " Speed: " + location.getSpeed();
                         Log.d("AlertCheckerWorker", out);
-                        WorkerUtils.makeStatusNotification("Alert Checker", out, getApplicationContext(), 56);
+
+                        Alert nearest = findNearest(location.getLatitude(), location.getLongitude(), 40);
+//                        WorkerUtils.makeStatusNotification("Alert Checker", out, getApplicationContext(), 56);
                     } else {
                         Log.e("AlertCheckerWorker", "Location is null");
                         nullLocationCount++;
@@ -123,4 +137,20 @@ public class AlertCheckerWorker extends Worker {
         return Result.success();
     }
 
+    private Alerts loadAlertPoints() {
+        String myJson=inputStreamToString(context.getResources().openRawResource(R.raw.alerts_silchester));
+        return new Gson().fromJson(myJson, Alerts.class);
+    }
+
+    // https://stackoverflow.com/a/45177069
+    private String inputStreamToString(InputStream inputStream) {
+        try {
+            byte[] bytes = new byte[inputStream.available()];
+            inputStream.read(bytes, 0, bytes.length);
+            String json = new String(bytes);
+            return json;
+        } catch (IOException e) {
+            return null;
+        }
+    }
 }
