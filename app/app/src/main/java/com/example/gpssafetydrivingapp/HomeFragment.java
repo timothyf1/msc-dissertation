@@ -11,7 +11,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
-import com.example.gpssafetydrivingapp.alerts.AlertChecker;
+import com.example.gpssafetydrivingapp.alerts.AlertCheckerService;
 import com.example.gpssafetydrivingapp.databinding.FragmentHomeBinding;
 
 /**
@@ -101,17 +101,18 @@ public class HomeFragment extends Fragment {
         binding.buttonActivate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                SharedPreferences.Editor editor = sharedPreferences.edit();
                 if (binding.buttonActivate.getText().equals("Deactivate")) {
                     binding.textStatus.setText("Inactive");
                     binding.buttonActivate.setText("Activate");
-                    AlertChecker.stopAlertChecker(getContext());
+//                    AlertCheckerService.stopAlertChecker(getContext());
+                    editor.putBoolean("switch_alerts_enable", false);
                 } else {
                     binding.textStatus.setText("Active");
                     binding.buttonActivate.setText("Deactivate");
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putBoolean("switch_alerts_enable", true);
-                    editor.commit();
                 }
+                editor.commit();
             }
         });
 

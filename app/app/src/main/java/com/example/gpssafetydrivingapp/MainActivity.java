@@ -13,7 +13,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import androidx.preference.PreferenceManager;
 
-import com.example.gpssafetydrivingapp.alerts.AlertChecker;
+import com.example.gpssafetydrivingapp.alerts.AlertCheckerService;
 import com.example.gpssafetydrivingapp.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Start alert checker if enabled in preferences
         if (sharedPreferences.getBoolean("switch_alerts_enable", false)) {
-            AlertChecker.startAlertChecker(getApplicationContext());
+            AlertCheckerService.startAlertChecker(getApplicationContext());
         }
     }
 
@@ -101,9 +101,9 @@ public class MainActivity extends AppCompatActivity {
                 boolean active = sharedPreferences.getBoolean("switch_alerts_enable", false);
 
                 if (active) {
-                    AlertChecker.startAlertChecker(getApplicationContext());
+                    AlertCheckerService.startAlertChecker(getApplicationContext());
                 } else {
-                    AlertChecker.stopAlertChecker(getApplicationContext());
+                    AlertCheckerService.stopAlertChecker(getApplicationContext());
                     Toast.makeText(this.getApplicationContext(), "Alerts are inactive", Toast.LENGTH_SHORT).show();
                 }
         }
