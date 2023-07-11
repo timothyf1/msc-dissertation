@@ -35,8 +35,6 @@ public class AlertCheckerService extends Service {
 
     private Alerts alerts;
     private Alert lastAlert;
-    private int count = 100;
-    private int nullLocationCount;
 
     @Nullable
     @Override
@@ -55,9 +53,7 @@ public class AlertCheckerService extends Service {
         locationListener = this::checkLocationAlert;
 
         makeAlertActiveNotification();
-
-        nullLocationCount = 0;
-
+        
         Log.d("AlertCheckerService", "Loading alert points");
         alerts = loadAlertPoints();
         Log.d("AlertCheckerService", alerts.getNumberOfAlerts() + " alert points loaded");
