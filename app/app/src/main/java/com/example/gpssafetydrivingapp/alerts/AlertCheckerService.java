@@ -27,6 +27,9 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.security.Timestamp;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 public class AlertCheckerService extends Service {
 
@@ -37,6 +40,7 @@ public class AlertCheckerService extends Service {
 
     private Alerts alerts;
     private Alert lastAlert;
+    private long lastAlertTime;
 
     @Nullable
     @Override
@@ -152,13 +156,14 @@ public class AlertCheckerService extends Service {
             Log.d("AlertCheckerService", "Bearing is invalid for alert point");
             return;
         }
-        Log.d("AlertCheckerService", "Bearing is valid for alert point");
 
-        if (lastAlert == nearestAlert) {
-            Log.d("AlertCheckerService", "Nearest Alert is the last activated alert. Skipping making alert");
+        // Check against last alert and its timing
+        if (checkLastAlert(nearestAlert)) {
+            Log.d("AlertCheckerService", "Nearest Alert is the last activated alert within 60 seconds. Skipping making alert");
             return;
         }
 
+        lastAlertTime = System.currentTimeMillis();
         lastAlert = nearestAlert;
         createAlert(nearestAlert);
     }
@@ -169,6 +174,14 @@ public class AlertCheckerService extends Service {
         boolean allAlertTypes = sharedPreferences.getBoolean("switch_all_alerts", true);
 
         return allAlertTypes || alertTypeActive;
+    }
+
+    private boolean checkLastAlert(Alert candidateAlert) {
+        if (lastAlert == candidateAlert) {
+            long timeDifference = System.currentTimeMillis() - lastAlertTime;
+            return timeDifference < 60000;
+        }
+        return false;
     }
 
     private void createAlert(Alert alertPoint) {
