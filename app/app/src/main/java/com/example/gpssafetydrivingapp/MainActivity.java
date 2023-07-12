@@ -104,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
                     AlertCheckerService.startAlertChecker(getApplicationContext());
                 } else {
                     AlertCheckerService.stopAlertChecker(getApplicationContext());
-                    Toast.makeText(this.getApplicationContext(), "Alerts are inactive", Toast.LENGTH_SHORT).show();
                 }
         }
 
