@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.IBinder;
 import android.os.Looper;
@@ -14,6 +15,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.preference.PreferenceManager;
 
 import com.example.gpssafetydrivingapp.R;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -32,6 +34,7 @@ public class AlertCheckerService extends Service {
     private FusedLocationProviderClient fusedLocationClient;
     private LocationListener locationListener;
     private LocationRequest locationRequest;
+    private SharedPreferences sharedPreferences;
 
     private Alerts alerts;
     private Alert lastAlert;
@@ -45,6 +48,7 @@ public class AlertCheckerService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
         locationRequest = new LocationRequest.Builder(4000)
                 .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
@@ -138,6 +142,12 @@ public class AlertCheckerService extends Service {
         }
         Log.d("AlertCheckerService", "Nearest Alert id: " + nearestAlert.getId());
 
+        // Check to see if the alert type is active
+        if (!checkAlertTypeSettings(nearestAlert.getAlertType())) {
+            Log.d("AlertCheckerService", "Alert type " + nearestAlert.getAlertType() + " is currently disabled");
+            return;
+        }
+
         // Check the direction of travel to the direction of the alert
         if (!nearestAlert.checkBearing(location.getBearing())) {
             Log.d("AlertCheckerService", "Bearing is invalid for alert point");
@@ -152,6 +162,14 @@ public class AlertCheckerService extends Service {
 
         lastAlert = nearestAlert;
         createAlert(nearestAlert);
+    }
+
+    private boolean checkAlertTypeSettings(int alertType) {
+        String alertTypeSetting = "switch_alert_type_" + alertType;
+        boolean alertTypeActive = sharedPreferences.getBoolean(alertTypeSetting, false);
+        boolean allAlertTypes = sharedPreferences.getBoolean("switch_all_alerts", true);
+
+        return allAlertTypes || alertTypeActive;
     }
 
     private void createAlert(Alert alertPoint) {
