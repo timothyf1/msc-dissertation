@@ -6,6 +6,16 @@
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
-    <item android:title="Alert History" />
+        app:showAsAction="never"
+        />
+    <item
+        android:id="@+id/action_alert_history"
+        android:title="@string/action_alert_history"
+        android:orderInCategory="90"
+        />
+    <item
+        android:id="@+id/action_about"
+        android:title="@string/action_about"
+        android:orderInCategory="110"
+        />
 </menu>
