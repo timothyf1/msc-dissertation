@@ -60,7 +60,18 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
+
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         if (id == R.id.action_settings) {
+            navController.navigate(R.id.settingsFragment);
+            return true;
+        }
+        if (id == R.id.action_about) {
+            navController.navigate(R.id.aboutFragment);
+            return true;
+        }
+        if (id == R.id.action_alert_history) {
+            navController.navigate(R.id.alertHistoryFragment);
             return true;
         }
 
