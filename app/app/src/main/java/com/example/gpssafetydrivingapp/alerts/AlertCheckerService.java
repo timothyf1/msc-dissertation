@@ -216,14 +216,6 @@ public class AlertCheckerService extends Service {
 
         Log.d("AlertCheckerService", "Creating alert notification");
 
-        WorkerUtils.makeStatusNotification("Danger Ahead", alertText, getApplicationContext(), 667);
-
-        try {
-            TimeUnit.SECONDS.sleep(2);
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
-
         textToSpeech.speak(alertText, TextToSpeech.QUEUE_FLUSH, null, null);
     }
 
