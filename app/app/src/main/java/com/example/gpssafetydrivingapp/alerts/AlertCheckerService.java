@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.IBinder;
 import android.os.Looper;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -27,9 +28,8 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.security.Timestamp;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class AlertCheckerService extends Service {
 
@@ -37,6 +37,7 @@ public class AlertCheckerService extends Service {
     private LocationListener locationListener;
     private LocationRequest locationRequest;
     private SharedPreferences sharedPreferences;
+    private TextToSpeech textToSpeech;
 
     private Alerts alerts;
     private Alert lastAlert;
@@ -58,6 +59,16 @@ public class AlertCheckerService extends Service {
                 .build();
 
         locationListener = this::checkLocationAlert;
+        textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int i) {
+                // if No error is found then only it will run
+                if(i!=TextToSpeech.ERROR){
+                    // To Choose language of speech
+                    textToSpeech.setLanguage(Locale.UK);
+                }
+            }
+        });
 
         makeAlertActiveNotification();
         
@@ -206,6 +217,14 @@ public class AlertCheckerService extends Service {
         Log.d("AlertCheckerService", "Creating alert notification");
 
         WorkerUtils.makeStatusNotification("Danger Ahead", alertText, getApplicationContext(), 667);
+
+        try {
+            TimeUnit.SECONDS.sleep(2);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
+        textToSpeech.speak(alertText, TextToSpeech.QUEUE_FLUSH, null, null);
     }
 
     public static void startAlertChecker(Context context) {
