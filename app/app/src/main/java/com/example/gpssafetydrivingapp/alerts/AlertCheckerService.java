@@ -136,7 +136,7 @@ public class AlertCheckerService extends Service {
         Alert nearestAlert = alerts.findNearest(location.getLatitude(), location.getLongitude(), 40);
 
         // Check to see if there is a alert found
-        if (Objects.equals(nearestAlert.getId(), "-1")) {
+        if (nearestAlert == null) {
             Log.d("AlertCheckerService", "Could not alert point within 40 meters");
             return;
         }

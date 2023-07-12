@@ -15,7 +15,7 @@ public class Alerts {
 
     public Alert findNearest(double lat, double lon, int maxDistance) {
         double current_nearest_distance = maxDistance;
-        Alert current_nearest_alert = new Alert("-1", 0, 0, 0, 0, 0);
+        Alert current_nearest_alert = null;
 
         LatLng current_location = new LatLng(lat, lon);
 
