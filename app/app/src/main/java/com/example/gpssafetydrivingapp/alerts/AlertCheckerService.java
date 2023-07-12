@@ -27,7 +27,6 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.Objects;
 
 public class AlertCheckerService extends Service {
 
