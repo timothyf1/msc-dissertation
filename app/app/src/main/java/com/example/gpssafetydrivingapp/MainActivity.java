@@ -1,11 +1,21 @@
 package com.example.gpssafetydrivingapp;
 
+import static android.Manifest.permission.ACCESS_BACKGROUND_LOCATION;
+import static android.Manifest.permission.POST_NOTIFICATIONS;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -14,6 +24,8 @@ import androidx.preference.PreferenceManager;
 
 import com.example.gpssafetydrivingapp.alerts.AlertCheckerService;
 import com.example.gpssafetydrivingapp.databinding.ActivityMainBinding;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -41,6 +53,14 @@ public class MainActivity extends AppCompatActivity {
 
         // Start alert checker if enabled in preferences
         if (sharedPreferences.getBoolean("switch_alerts_enable", false)) {
+            // Check for missing permissions
+            ArrayList<String> missingPermissions = checkAllPermissions();
+            if (missingPermissions.size() > 0) {
+                Log.e("AlertChecker", "Missing permissions");
+                requestPermissions(missingPermissions);
+                return;
+            }
+
             AlertCheckerService.startAlertChecker(getApplicationContext());
         }
     }
@@ -109,8 +129,21 @@ public class MainActivity extends AppCompatActivity {
         switch (key) {
             case "switch_alerts_enable":
                 boolean active = sharedPreferences.getBoolean("switch_alerts_enable", false);
+                Log.d("AlertChecker", "Alerts setting change to " + active);
 
                 if (active) {
+                    Log.d("AlertChecker", "Alerts turned on, checking permissions");
+
+                    // Check for missing permissions
+                    ArrayList<String> missingPermissions = checkAllPermissions();
+                    if (missingPermissions.size() > 0) {
+                        Log.e("AlertChecker", "Missing permissions");
+                        requestPermissions(missingPermissions);
+                        return;
+                    }
+
+                    Log.d("AlertChecker", "Permissions are granted");
+
                     AlertCheckerService.startAlertChecker(getApplicationContext());
                 } else {
                     AlertCheckerService.stopAlertChecker(getApplicationContext());
@@ -118,4 +151,28 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+    public ArrayList<String> checkAllPermissions() {
+        ArrayList<String> missingPermissionsAL = new ArrayList<String>();
+
+        // Check for notifications
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), POST_NOTIFICATIONS) == PackageManager.PERMISSION_DENIED) {
+            Log.d("AlertChecker", "Missing notification permission");
+            missingPermissionsAL.add(POST_NOTIFICATIONS);
+        }
+
+        // Check for background location
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            Log.d("AlertChecker", "Missing background location permission");
+            missingPermissionsAL.add(ACCESS_BACKGROUND_LOCATION);
+        }
+
+        return missingPermissionsAL;
+    }
+
+    public void requestPermissions(ArrayList<String> missingPermissionsAL) {
+        String[] missingPermissions = missingPermissionsAL.toArray(new String[0]);
+        ActivityCompat.requestPermissions(this, missingPermissions, 4);
+    }
+
 }

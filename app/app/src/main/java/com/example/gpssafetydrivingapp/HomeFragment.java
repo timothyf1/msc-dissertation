@@ -2,6 +2,7 @@ package com.example.gpssafetydrivingapp;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,18 +72,23 @@ public class HomeFragment extends Fragment {
         binding.buttonActivate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("Home Fragment", "Activate/Deactivate button pressed");
+
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 if (binding.buttonActivate.getText().equals("Deactivate")) {
+                    Log.d("Home Fragment", "Turn off alerts");
                     binding.textStatus.setText("Inactive");
                     binding.buttonActivate.setText("Activate");
 //                    AlertCheckerService.stopAlertChecker(getContext());
                     editor.putBoolean("switch_alerts_enable", false);
                 } else {
+                    Log.d("Home Fragment", "Turn on alerts");
                     binding.textStatus.setText("Active");
                     binding.buttonActivate.setText("Deactivate");
                     editor.putBoolean("switch_alerts_enable", true);
                 }
                 editor.commit();
+                Log.d("Home Fragment", "Settings updated");
             }
         });
 

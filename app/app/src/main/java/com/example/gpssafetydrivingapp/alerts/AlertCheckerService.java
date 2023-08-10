@@ -29,7 +29,6 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 public class AlertCheckerService extends Service {
 
@@ -114,7 +113,7 @@ public class AlertCheckerService extends Service {
     }
 
     private Alerts loadAlertPoints() {
-        String myJson = inputStreamToString(getApplicationContext().getResources().openRawResource(R.raw.alerts_silchester));
+        String myJson = inputStreamToString(getApplicationContext().getResources().openRawResource(R.raw.alerts_wales));
         return new Gson().fromJson(myJson, Alerts.class);
     }
 
