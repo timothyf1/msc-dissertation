@@ -90,10 +90,6 @@ public class MainActivity extends AppCompatActivity {
             navController.navigate(R.id.aboutFragment);
             return true;
         }
-        if (id == R.id.action_alert_history) {
-            navController.navigate(R.id.alertHistoryFragment);
-            return true;
-        }
 
         return super.onOptionsItemSelected(item);
     }
