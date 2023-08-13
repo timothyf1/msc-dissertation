@@ -21,15 +21,6 @@
             app:destination="@id/aboutFragment" />
     </fragment>
     <fragment
-        android:id="@+id/alertHistoryFragment"
-        android:name="com.example.gpssafetydrivingapp.AlertHistoryFragment"
-        android:label="Alert History"
-        tools:layout="@layout/fragment_alert_history">
-        <action
-            android:id="@+id/action_alertHistoryFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
-    </fragment>
-    <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.gpssafetydrivingapp.SettingsFragment"
         android:label="Settings" />
