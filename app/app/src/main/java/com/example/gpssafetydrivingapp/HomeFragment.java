@@ -77,14 +77,14 @@ public class HomeFragment extends Fragment {
                 SharedPreferences.Editor editor = sharedPreferences.edit();
                 if (binding.buttonActivate.getText().equals("Deactivate")) {
                     Log.d("Home Fragment", "Turn off alerts");
-                    binding.textStatus.setText("Inactive");
-                    binding.buttonActivate.setText("Activate");
+                    binding.textStatus.setText(R.string.inactive);
+                    binding.buttonActivate.setText(R.string.activate);
 //                    AlertCheckerService.stopAlertChecker(getContext());
                     editor.putBoolean("switch_alerts_enable", false);
                 } else {
                     Log.d("Home Fragment", "Turn on alerts");
-                    binding.textStatus.setText("Active");
-                    binding.buttonActivate.setText("Deactivate");
+                    binding.textStatus.setText(R.string.active);
+                    binding.buttonActivate.setText(R.string.deactivate);
                     editor.putBoolean("switch_alerts_enable", true);
                 }
                 editor.commit();
@@ -100,11 +100,11 @@ public class HomeFragment extends Fragment {
 
         boolean active = sharedPreferences.getBoolean("switch_alerts_enable", false);
         if (active) {
-            binding.textStatus.setText("Active");
-            binding.buttonActivate.setText("Deactivate");
+            binding.textStatus.setText(R.string.active);
+            binding.buttonActivate.setText(R.string.deactivate);
         } else {
-            binding.textStatus.setText("Inactive");
-            binding.buttonActivate.setText("Activate");
+            binding.textStatus.setText(R.string.inactive);
+            binding.buttonActivate.setText(R.string.activate);
         }
     }
 }

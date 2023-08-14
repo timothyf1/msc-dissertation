@@ -12,7 +12,7 @@
         android:layout_width="387dp"
         android:layout_height="230dp"
         android:layout_marginTop="32dp"
-        android:text="In order for the alert checker to run access to background location is required.\n\nThis is required as the alert checker needs to know your location to provide alerts.\n\nWhen clicking on the button below please select the Allow all the time option"
+        android:text="@string/permission_background_location_intro"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -24,7 +24,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="52dp"
-        android:text="Open Settings"
+        android:text="@string/open_settings"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView2" />

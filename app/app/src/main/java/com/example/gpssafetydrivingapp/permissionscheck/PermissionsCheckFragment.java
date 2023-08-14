@@ -56,7 +56,7 @@ public class PermissionsCheckFragment extends Fragment {
                 NavHostFragment.findNavController(PermissionsCheckFragment.this)
                 .navigate(R.id.action_permissionsCheckFragment_to_permissionsCheckLocationFragment2));
 
-        binding.buttonFinshed.setOnClickListener(v ->
+        binding.buttonFinishedPermissionsCheck.setOnClickListener(v ->
                 NavHostFragment.findNavController(PermissionsCheckFragment.this)
                 .navigate(R.id.homeFragment));
     }
@@ -67,13 +67,13 @@ public class PermissionsCheckFragment extends Fragment {
 
         if (ContextCompat.checkSelfPermission(getContext(), POST_NOTIFICATIONS) == PermissionChecker.PERMISSION_GRANTED) {
             Log.d("Permission Check", "Notifications already granted updating text and disable button");
-            binding.textViewStatusNot.setText("Granted");
+            binding.textViewStatusNot.setText(R.string.granted);
             binding.buttonGrantNotifications.setEnabled(false);
         }
 
         if (ContextCompat.checkSelfPermission(getContext(), ACCESS_FINE_LOCATION) == PermissionChecker.PERMISSION_GRANTED) {
             Log.d("Permission Check", "Fine location already granted updating text and disable button");
-            binding.textViewStatusPreciseLocation.setText("Granted");
+            binding.textViewStatusPreciseLocation.setText(R.string.granted);
             binding.buttonGrantLocationPr.setEnabled(false);
             binding.buttonGrantBackLocation.setEnabled(true);
             binding.textViewBackInfo.setText("");
@@ -83,7 +83,7 @@ public class PermissionsCheckFragment extends Fragment {
 
         if (ContextCompat.checkSelfPermission(getContext(), ACCESS_BACKGROUND_LOCATION) == PermissionChecker.PERMISSION_GRANTED) {
             Log.d("Permission Check", "Background location already granted updating text and disable button");
-            binding.textViewStatusLocation.setText("Granted");
+            binding.textViewStatusLocation.setText(R.string.granted);
             binding.buttonGrantBackLocation.setEnabled(false);
         }
 

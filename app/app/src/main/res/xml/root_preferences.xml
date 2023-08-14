@@ -4,75 +4,44 @@
     <SwitchPreference
         android:defaultValue="false"
         android:key="switch_alerts_enable"
-        android:title="Driving Alerts" />
-    <PreferenceCategory android:title="Alert Types">
+        android:title="@string/settings_driving_alerts" />
+
+    <PreferenceCategory android:title="@string/alert_types">
 
         <SwitchPreference
             android:defaultValue="true"
             android:key="switch_all_alerts"
-            android:title="All Alerts Types"
+            android:title="@string/all_alert_types"
             app:dependency="switch_alerts_enable"
             app:disableDependentsState="true"
-            app:summaryOff="Select which alerts you would like to recieve below"
-            app:summaryOn="All Alert types are enabled" />
+            app:summaryOff="@string/all_alert_types_on"
+            app:summaryOn="@string/all_alert_types_off" />
 
         <SwitchPreference
             android:defaultValue="true"
             android:key="switch_alert_type_10"
-            android:title="Road Widens"
+            android:title="@string/road_widens"
             app:dependency="switch_all_alerts" />
         <SwitchPreference
             android:defaultValue="true"
             android:key="switch_alert_type_20"
-            android:title="Junction"
+            android:title="@string/junction"
             app:dependency="switch_all_alerts" />
 
-        <SeekBarPreference
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/alert_options">
+    <SeekBarPreference
             android:defaultValue="10"
             android:key="min_alert_speed"
             android:max="40"
             android:min="0"
-            android:title="Minimum speed for alerts"
-            app:allowDividerAbove="true"
+            android:title="@string/min_speed"
             app:dependency="switch_alerts_enable"
             app:showSeekBarValue="true"
             app:singleLineTitle="false"
-            app:summary="When travelling below this speed alerts will not be created" />
-
-        <!--        <TextView-->
-        <!--            />-->
+            app:summary="@string/min_speed_info" />
 
     </PreferenceCategory>
-<!--    <PreferenceCategory app:title="@string/messages_header">-->
-
-<!--        <EditTextPreference-->
-<!--            app:key="signature"-->
-<!--            app:title="@string/signature_title"-->
-<!--            app:useSimpleSummaryProvider="true" />-->
-
-<!--        <ListPreference-->
-<!--            app:defaultValue="reply"-->
-<!--            app:entries="@array/reply_entries"-->
-<!--            app:entryValues="@array/reply_values"-->
-<!--            app:key="reply"-->
-<!--            app:title="@string/reply_title"-->
-<!--            app:useSimpleSummaryProvider="true" />-->
-
-<!--    </PreferenceCategory>-->
-
-<!--    <PreferenceCategory app:title="@string/sync_header">-->
-
-<!--        <SwitchPreferenceCompat-->
-<!--            app:key="sync"-->
-<!--            app:title="@string/sync_title" />-->
-
-<!--        <SwitchPreferenceCompat-->
-<!--            app:dependency="sync"-->
-<!--            app:key="attachment"-->
-<!--            app:summaryOff="@string/attachment_summary_off"-->
-<!--            app:summaryOn="@string/attachment_summary_on"-->
-<!--            app:title="@string/attachment_title" />-->
-
-<!--    </PreferenceCategory>-->
 
 </PreferenceScreen>
