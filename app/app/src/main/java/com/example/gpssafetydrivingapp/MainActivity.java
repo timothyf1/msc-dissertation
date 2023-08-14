@@ -54,10 +54,11 @@ public class MainActivity extends AppCompatActivity {
         // Start alert checker if enabled in preferences
         if (sharedPreferences.getBoolean("switch_alerts_enable", false)) {
             // Check for missing permissions
-            ArrayList<String> missingPermissions = checkAllPermissions();
-            if (missingPermissions.size() > 0) {
-                Log.e("AlertChecker", "Missing permissions");
-                navController.navigate(R.id.permissionsCheckFragment);
+            if (checkMissingPermissions()) {
+                Log.e("AlertChecker", "Missing permissions, not starting alert checker");
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.putBoolean("switch_alerts_enable", false);
+                editor.commit();
                 return;
             }
 
@@ -130,9 +131,11 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("AlertChecker", "Alerts turned on, checking permissions");
 
                     // Check for missing permissions
-                    ArrayList<String> missingPermissions = checkAllPermissions();
-                    if (missingPermissions.size() > 0) {
+                    if (checkMissingPermissions()) {
                         Log.e("AlertChecker", "Missing permissions");
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putBoolean("switch_alerts_enable", false);
+                        editor.commit();
                         navController.navigate(R.id.permissionsCheckFragment);
                         return;
                     }
@@ -147,22 +150,22 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public ArrayList<String> checkAllPermissions() {
+    public boolean checkMissingPermissions() {
         ArrayList<String> missingPermissionsAL = new ArrayList<String>();
 
         // Check for notifications
         if (ContextCompat.checkSelfPermission(getApplicationContext(), POST_NOTIFICATIONS) == PackageManager.PERMISSION_DENIED) {
             Log.d("AlertChecker", "Missing notification permission");
-            missingPermissionsAL.add(POST_NOTIFICATIONS);
+            return true;
         }
 
         // Check for background location
         if (ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_DENIED) {
             Log.d("AlertChecker", "Missing background location permission");
-            missingPermissionsAL.add(ACCESS_BACKGROUND_LOCATION);
+            return true;
         }
 
-        return missingPermissionsAL;
+        return false;
     }
 
     @Override
