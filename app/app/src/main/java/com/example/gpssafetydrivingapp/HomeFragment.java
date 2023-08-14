@@ -30,7 +30,7 @@ public class HomeFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
@@ -42,7 +42,7 @@ public class HomeFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.requireActivity());
 
         binding.buttonSettings.setOnClickListener(v ->
                 NavHostFragment.findNavController(HomeFragment.this)

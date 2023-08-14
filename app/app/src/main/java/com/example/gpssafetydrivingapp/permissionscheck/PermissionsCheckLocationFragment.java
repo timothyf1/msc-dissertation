@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.gpssafetydrivingapp.databinding.FragmentPermissionsCheckLocationBinding;
@@ -28,7 +27,7 @@ public class PermissionsCheckLocationFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentPermissionsCheckLocationBinding.inflate(inflater, container, false);
@@ -40,6 +39,6 @@ public class PermissionsCheckLocationFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         binding.buttonOpenLocationSettings.setOnClickListener(v ->
-                ActivityCompat.requestPermissions(getActivity(), new String[]{ACCESS_BACKGROUND_LOCATION}, 9));
+                requireActivity().requestPermissions(new String[]{ACCESS_BACKGROUND_LOCATION}, 9));
     }
 }

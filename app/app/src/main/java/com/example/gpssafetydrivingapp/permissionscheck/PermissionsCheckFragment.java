@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.PermissionChecker;
 import androidx.fragment.app.Fragment;
@@ -35,7 +34,7 @@ public class PermissionsCheckFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentPermissionsCheckBinding.inflate(inflater, container, false);
@@ -47,10 +46,10 @@ public class PermissionsCheckFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         binding.buttonGrantNotifications.setOnClickListener(v ->
-                ActivityCompat.requestPermissions(getActivity(), new String[] {POST_NOTIFICATIONS}, 7));
+                requireActivity().requestPermissions(new String[] {POST_NOTIFICATIONS}, 7));
 
         binding.buttonGrantLocationPr.setOnClickListener(v ->
-                ActivityCompat.requestPermissions(getActivity(), new String[] {ACCESS_FINE_LOCATION}, 8));
+                requireActivity().requestPermissions(new String[] {ACCESS_FINE_LOCATION}, 8));
 
         binding.buttonGrantBackLocation.setOnClickListener(v ->
                 NavHostFragment.findNavController(PermissionsCheckFragment.this)
@@ -65,13 +64,15 @@ public class PermissionsCheckFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        if (ContextCompat.checkSelfPermission(getContext(), POST_NOTIFICATIONS) == PermissionChecker.PERMISSION_GRANTED) {
+        Log.d("Permission Check", "Loading current permission status");
+
+        if (ContextCompat.checkSelfPermission(requireContext(), POST_NOTIFICATIONS) == PermissionChecker.PERMISSION_GRANTED) {
             Log.d("Permission Check", "Notifications already granted updating text and disable button");
             binding.textViewStatusNot.setText(R.string.granted);
             binding.buttonGrantNotifications.setEnabled(false);
         }
 
-        if (ContextCompat.checkSelfPermission(getContext(), ACCESS_FINE_LOCATION) == PermissionChecker.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(requireContext(), ACCESS_FINE_LOCATION) == PermissionChecker.PERMISSION_GRANTED) {
             Log.d("Permission Check", "Fine location already granted updating text and disable button");
             binding.textViewStatusPreciseLocation.setText(R.string.granted);
             binding.buttonGrantLocationPr.setEnabled(false);
@@ -81,11 +82,10 @@ public class PermissionsCheckFragment extends Fragment {
             binding.buttonGrantBackLocation.setEnabled(false);
         }
 
-        if (ContextCompat.checkSelfPermission(getContext(), ACCESS_BACKGROUND_LOCATION) == PermissionChecker.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(requireContext(), ACCESS_BACKGROUND_LOCATION) == PermissionChecker.PERMISSION_GRANTED) {
             Log.d("Permission Check", "Background location already granted updating text and disable button");
             binding.textViewStatusLocation.setText(R.string.granted);
             binding.buttonGrantBackLocation.setEnabled(false);
         }
-
     }
 }

@@ -167,26 +167,24 @@ public class MainActivity extends AppCompatActivity {
         switch (requestCode) {
             case 7:
                 if (grantResults[0] == PermissionChecker.PERMISSION_GRANTED) {
-                    Log.d("Permission Check", "Notifications Granted");
-                    navController.clearBackStack(R.id.permissionsCheckFragment);
+                    Log.d("Permission Check Result", "Notifications Granted");
                 } else {
-                    Log.d("Permission Check", "Notifications Denied");
+                    Log.d("Permission Check Result", "Notifications Denied");
                 }
                 break;
             case 8:
                 if (grantResults[0] == PermissionChecker.PERMISSION_GRANTED) {
-                    Log.d("Permission Check", "Precise Location Granted");
-                    navController.clearBackStack(R.id.permissionsCheckFragment);
+                    Log.d("Permission Check Result", "Precise Location Granted");
                 } else {
-                    Log.d("Permission Check", "Precise Location Denied");
+                    Log.d("Permission Check Result", "Precise Location Denied");
                 }
                 break;
             case 9:
                 if (grantResults[0] == PermissionChecker.PERMISSION_GRANTED) {
-                    Log.d("Permission Check", "Background Location Granted");
+                    Log.d("Permission Check Result", "Background Location Granted");
                     navController.popBackStack();
                 } else {
-                    Log.d("Permission Check", "Background Location Denied");
+                    Log.d("Permission Check Result", "Background Location Denied");
                 }
                 break;
         }
