@@ -98,9 +98,6 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
 
-        int min_alert_speed = sharedPreferences.getInt("min_alert_speed", 0);
-        binding.textViewTest.setText(String.valueOf(min_alert_speed));
-
         boolean active = sharedPreferences.getBoolean("switch_alerts_enable", false);
         if (active) {
             binding.textStatus.setText("Active");
