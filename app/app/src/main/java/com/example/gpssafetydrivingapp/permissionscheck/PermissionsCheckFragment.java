@@ -1,9 +1,12 @@
 package com.example.gpssafetydrivingapp.permissionscheck;
 
+import static android.Manifest.permission.POST_NOTIFICATIONS;
+
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -39,11 +42,18 @@ public class PermissionsCheckFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.buttonNext.setOnClickListener(new View.OnClickListener() {
+        binding.buttonGrantNotifications.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ActivityCompat.requestPermissions(getActivity(), new String[] {POST_NOTIFICATIONS}, 7);
+            }
+        });
+
+        binding.buttonGrantLocationPage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NavHostFragment.findNavController(PermissionsCheckFragment.this)
-                        .navigate(R.id.action_homeFragment_to_permissionsCheckFragment);
+                        .navigate(R.id.action_permissionsCheckFragment_to_permissionsCheckLocationFragment2);
             }
         });
     }
