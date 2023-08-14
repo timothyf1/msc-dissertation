@@ -30,8 +30,8 @@
         <SeekBarPreference
             android:defaultValue="10"
             android:key="min_alert_speed"
-            android:max="20"
-            android:min="10"
+            android:max="40"
+            android:min="0"
             android:title="Minimum speed for alerts"
             app:allowDividerAbove="true"
             app:dependency="switch_alerts_enable"

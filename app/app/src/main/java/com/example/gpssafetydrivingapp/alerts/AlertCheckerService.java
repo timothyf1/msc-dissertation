@@ -113,7 +113,7 @@ public class AlertCheckerService extends Service {
     }
 
     private Alerts loadAlertPoints() {
-        String myJson = inputStreamToString(getApplicationContext().getResources().openRawResource(R.raw.alerts_wales));
+        String myJson = inputStreamToString(getApplicationContext().getResources().openRawResource(R.raw.alerts_silchester));
         return new Gson().fromJson(myJson, Alerts.class);
     }
 
@@ -164,6 +164,14 @@ public class AlertCheckerService extends Service {
         // Check the direction of travel to the direction of the alert
         if (!nearestAlert.checkBearing(location.getBearing())) {
             Log.d("AlertCheckerService", "Bearing is invalid for alert point");
+            return;
+        }
+
+        // Get speed setting and convert to mph
+        double speedMin = sharedPreferences.getInt("min_alert_speed", 0) * 0.44707;
+        // Check speed
+        if (location.getSpeed() < speedMin) {
+            Log.d("AlertCheckerService", "Speed below minimal speed");
             return;
         }
 
