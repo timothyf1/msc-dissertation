@@ -3,15 +3,14 @@ package com.example.gpssafetydrivingapp.permissionscheck;
 import static android.Manifest.permission.ACCESS_BACKGROUND_LOCATION;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.example.gpssafetydrivingapp.databinding.FragmentPermissionsCheckLocationBinding;
 
@@ -41,7 +40,14 @@ public class PermissionsCheckLocationFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         binding.buttonOpenLocationSettings.setOnClickListener(v -> {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{ACCESS_BACKGROUND_LOCATION}, 8);
+            ActivityCompat.requestPermissions(getActivity(), new String[]{ACCESS_BACKGROUND_LOCATION}, 9);
         });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+
     }
 }

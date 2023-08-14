@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             ArrayList<String> missingPermissions = checkAllPermissions();
             if (missingPermissions.size() > 0) {
                 Log.e("AlertChecker", "Missing permissions");
-                requestPermissions(missingPermissions);
+                navController.navigate(R.id.permissionsCheckFragment);
                 return;
             }
 
@@ -133,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
                     ArrayList<String> missingPermissions = checkAllPermissions();
                     if (missingPermissions.size() > 0) {
                         Log.e("AlertChecker", "Missing permissions");
-                        requestPermissions(missingPermissions);
+                        navController.navigate(R.id.permissionsCheckFragment);
                         return;
                     }
 
@@ -165,11 +165,6 @@ public class MainActivity extends AppCompatActivity {
         return missingPermissionsAL;
     }
 
-    public void requestPermissions(ArrayList<String> missingPermissionsAL) {
-        String[] missingPermissions = missingPermissionsAL.toArray(new String[0]);
-        ActivityCompat.requestPermissions(this, missingPermissions, 4);
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -184,6 +179,14 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case 8:
+                if (grantResults[0] == PermissionChecker.PERMISSION_GRANTED) {
+                    Log.d("Permission Check", "Precise Location Granted");
+                    navController.clearBackStack(R.id.permissionsCheckFragment);
+                } else {
+                    Log.d("Permission Check", "Precise Location Denied");
+                }
+                break;
+            case 9:
                 if (grantResults[0] == PermissionChecker.PERMISSION_GRANTED) {
                     Log.d("Permission Check", "Background Location Granted");
                     navController.popBackStack();
