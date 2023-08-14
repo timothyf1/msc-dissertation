@@ -61,7 +61,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        binding.buttonHistory.setOnClickListener(new View.OnClickListener() {
+        binding.buttonCheckPermissions.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 NavHostFragment.findNavController(HomeFragment.this)

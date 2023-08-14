@@ -10,9 +10,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.PermissionChecker;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     private AppBarConfiguration appBarConfiguration;
     private ActivityMainBinding binding;
+    private NavController navController;
 
     private SharedPreferences sharedPreferences;
 
@@ -40,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         setSupportActionBar(binding.toolbar);
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
 
@@ -78,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
 
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         if (id == R.id.action_settings) {
             navController.navigate(R.id.settingsFragment);
             return true;
@@ -94,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
 //    The
     @Override
     public boolean onSupportNavigateUp() {
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
+//        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
     }
@@ -168,4 +170,27 @@ public class MainActivity extends AppCompatActivity {
         ActivityCompat.requestPermissions(this, missingPermissions, 4);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case 7:
+                if (grantResults[0] == PermissionChecker.PERMISSION_GRANTED) {
+                    Log.d("Permission Check", "Notifications Granted");
+                    navController.clearBackStack(R.id.permissionsCheckFragment);
+                } else {
+                    Log.d("Permission Check", "Notifications Denied");
+                }
+                break;
+            case 8:
+                if (grantResults[0] == PermissionChecker.PERMISSION_GRANTED) {
+                    Log.d("Permission Check", "Background Location Granted");
+                    navController.popBackStack();
+                } else {
+                    Log.d("Permission Check", "Background Location Denied");
+                }
+                break;
+        }
+    }
 }
