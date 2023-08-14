@@ -39,15 +39,7 @@ public class PermissionsCheckLocationFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.buttonOpenLocationSettings.setOnClickListener(v -> {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{ACCESS_BACKGROUND_LOCATION}, 9);
-        });
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-
+        binding.buttonOpenLocationSettings.setOnClickListener(v ->
+                ActivityCompat.requestPermissions(getActivity(), new String[]{ACCESS_BACKGROUND_LOCATION}, 9));
     }
 }

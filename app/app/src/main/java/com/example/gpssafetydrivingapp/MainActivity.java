@@ -12,7 +12,6 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.PermissionChecker;
 import androidx.navigation.NavController;
@@ -23,8 +22,6 @@ import androidx.preference.PreferenceManager;
 
 import com.example.gpssafetydrivingapp.alerts.AlertCheckerService;
 import com.example.gpssafetydrivingapp.databinding.ActivityMainBinding;
-
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -120,37 +117,34 @@ public class MainActivity extends AppCompatActivity {
     // End of referenced code
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,String key) {
 
-        switch (key) {
-            case "switch_alerts_enable":
-                boolean active = sharedPreferences.getBoolean("switch_alerts_enable", false);
-                Log.d("AlertChecker", "Alerts setting change to " + active);
+        if ("switch_alerts_enable".equals(key)) {
+            boolean active = sharedPreferences.getBoolean("switch_alerts_enable", false);
+            Log.d("AlertChecker", "Alerts setting change to " + active);
 
-                if (active) {
-                    Log.d("AlertChecker", "Alerts turned on, checking permissions");
+            if (active) {
+                Log.d("AlertChecker", "Alerts turned on, checking permissions");
 
-                    // Check for missing permissions
-                    if (checkMissingPermissions()) {
-                        Log.e("AlertChecker", "Missing permissions");
-                        SharedPreferences.Editor editor = sharedPreferences.edit();
-                        editor.putBoolean("switch_alerts_enable", false);
-                        editor.commit();
-                        navController.navigate(R.id.permissionsCheckFragment);
-                        return;
-                    }
-
-                    Log.d("AlertChecker", "Permissions are granted");
-
-                    AlertCheckerService.startAlertChecker(getApplicationContext());
-                } else {
-                    AlertCheckerService.stopAlertChecker(getApplicationContext());
+                // Check for missing permissions
+                if (checkMissingPermissions()) {
+                    Log.e("AlertChecker", "Missing permissions");
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean("switch_alerts_enable", false);
+                    editor.commit();
+                    navController.navigate(R.id.permissionsCheckFragment);
+                    return;
                 }
+
+                Log.d("AlertChecker", "Permissions are granted");
+
+                AlertCheckerService.startAlertChecker(getApplicationContext());
+            } else {
+                AlertCheckerService.stopAlertChecker(getApplicationContext());
+            }
         }
 
     }
 
     public boolean checkMissingPermissions() {
-        ArrayList<String> missingPermissionsAL = new ArrayList<String>();
-
         // Check for notifications
         if (ContextCompat.checkSelfPermission(getApplicationContext(), POST_NOTIFICATIONS) == PackageManager.PERMISSION_DENIED) {
             Log.d("AlertChecker", "Missing notification permission");

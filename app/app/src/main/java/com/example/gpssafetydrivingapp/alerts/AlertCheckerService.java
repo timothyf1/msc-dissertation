@@ -58,14 +58,11 @@ public class AlertCheckerService extends Service {
                 .build();
 
         locationListener = this::checkLocationAlert;
-        textToSpeech = new TextToSpeech(getApplicationContext(), new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int i) {
-                // if No error is found then only it will run
-                if(i!=TextToSpeech.ERROR){
-                    // To Choose language of speech
-                    textToSpeech.setLanguage(Locale.UK);
-                }
+        textToSpeech = new TextToSpeech(getApplicationContext(), i -> {
+            // if No error is found then only it will run
+            if(i!=TextToSpeech.ERROR){
+                // To Choose language of speech
+                textToSpeech.setLanguage(Locale.UK);
             }
         });
 

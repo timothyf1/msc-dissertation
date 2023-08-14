@@ -38,6 +38,7 @@
     <string name="min_speed_info">When travelling below this speed alerts will not be created</string>
 
     <!-- Permission Check -->
+    <string name="permissions_check">Permissions Check</string>
     <string name="permissions_back_info">Precise location needs to granted before background location.</string>
 
     <string name="notifications">Notifications</string>
@@ -53,6 +54,7 @@
     <string name="finished">Finished</string>
 
     <!-- Permission Check location -->
+    <string name="location_permissions">Location Permission</string>
     <string name="permission_background_location_intro">In order for the alert checker to run access to background location is required.\n\nThis is required as the alert checker needs to know your location to provide alerts.\n\nWhen clicking on the button below please select the Allow all the time option</string>
     <string name="open_settings">Open Settings</string>
 

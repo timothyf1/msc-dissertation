@@ -18,20 +18,11 @@ public class HomeFragment extends Fragment {
 
     SharedPreferences sharedPreferences;
 
-    private boolean active = false;
-
     private FragmentHomeBinding binding;
 
     public HomeFragment() {
         // Required empty public constructor
     }
-
-//    public static HomeFragment newInstance() {
-//        HomeFragment fragment = new HomeFragment();
-//        Bundle args = new Bundle();
-//        fragment.setArguments(args);
-//        return fragment;
-//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -53,43 +44,31 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.getActivity());
 
-        binding.buttonSettings.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        binding.buttonSettings.setOnClickListener(v ->
                 NavHostFragment.findNavController(HomeFragment.this)
-                        .navigate(R.id.action_homeFragment_to_settingsFragment);
-            }
-        });
+                .navigate(R.id.action_homeFragment_to_settingsFragment));
 
-        binding.buttonCheckPermissions.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        binding.buttonCheckPermissions.setOnClickListener(v ->
                 NavHostFragment.findNavController(HomeFragment.this)
-                        .navigate(R.id.action_homeFragment_to_permissionsCheckFragment);
-            }
-        });
+                .navigate(R.id.action_homeFragment_to_permissionsCheckFragment));
 
-        binding.buttonActivate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Home Fragment", "Activate/Deactivate button pressed");
+        binding.buttonActivate.setOnClickListener(v -> {
+            Log.d("Home Fragment", "Activate/Deactivate button pressed");
 
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                if (binding.buttonActivate.getText().equals("Deactivate")) {
-                    Log.d("Home Fragment", "Turn off alerts");
-                    binding.textStatus.setText(R.string.inactive);
-                    binding.buttonActivate.setText(R.string.activate);
-//                    AlertCheckerService.stopAlertChecker(getContext());
-                    editor.putBoolean("switch_alerts_enable", false);
-                } else {
-                    Log.d("Home Fragment", "Turn on alerts");
-                    binding.textStatus.setText(R.string.active);
-                    binding.buttonActivate.setText(R.string.deactivate);
-                    editor.putBoolean("switch_alerts_enable", true);
-                }
-                editor.commit();
-                Log.d("Home Fragment", "Settings updated");
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            if (binding.buttonActivate.getText().equals("Deactivate")) {
+                Log.d("Home Fragment", "Turn off alerts");
+                binding.textStatus.setText(R.string.inactive);
+                binding.buttonActivate.setText(R.string.activate);
+                editor.putBoolean("switch_alerts_enable", false);
+            } else {
+                Log.d("Home Fragment", "Turn on alerts");
+                binding.textStatus.setText(R.string.active);
+                binding.buttonActivate.setText(R.string.deactivate);
+                editor.putBoolean("switch_alerts_enable", true);
             }
+            editor.commit();
+            Log.d("Home Fragment", "Settings updated");
         });
 
     }
