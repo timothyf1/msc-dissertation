@@ -23,7 +23,11 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.gpssafetydrivingapp.SettingsFragment"
-        android:label="@string/settings" />
+        android:label="@string/settings" >
+        <action
+            android:id="@+id/action_settingsFragment_to_settingsAlertTypeFragment"
+            app:destination="@id/settingsAlertTypeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/aboutFragment"
         android:name="com.example.gpssafetydrivingapp.AboutFragment"
@@ -41,4 +45,8 @@
         android:id="@+id/permissionsCheckLocationFragment"
         android:name="com.example.gpssafetydrivingapp.permissionscheck.PermissionsCheckLocationFragment"
         android:label="@string/location_permissions" />
+    <fragment
+        android:id="@+id/settingsAlertTypeFragment"
+        android:name="com.example.gpssafetydrivingapp.SettingsAlertTypeFragment"
+        android:label="@string/select_alert_types" />
 </navigation>

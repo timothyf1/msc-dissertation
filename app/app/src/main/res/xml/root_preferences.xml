@@ -17,21 +17,17 @@
             app:summaryOff="@string/all_alert_types_on"
             app:summaryOn="@string/all_alert_types_off" />
 
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="switch_alert_type_10"
-            android:title="@string/road_widens"
-            app:dependency="switch_all_alerts" />
-        <SwitchPreference
-            android:defaultValue="true"
-            android:key="switch_alert_type_20"
-            android:title="@string/junction"
-            app:dependency="switch_all_alerts" />
+        <Preference
+            android:key="alert_types"
+            android:title="Alert Types"
+            app:dependency="switch_all_alerts"
+            app:disableDependentsState="false"
+        />
 
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/alert_options">
-    <SeekBarPreference
+        <SeekBarPreference
             android:defaultValue="10"
             android:key="min_alert_speed"
             android:max="40"
