@@ -41,6 +41,7 @@ public class AlertCheckerService extends Service {
     private Alerts alerts;
     private Alert lastAlert;
     private long lastAlertTime;
+    private String driveSide;
 
     @Nullable
     @Override
@@ -70,6 +71,11 @@ public class AlertCheckerService extends Service {
         
         Log.d("AlertCheckerService", "Loading alert points");
         alerts = loadAlertPoints();
+        if (alerts.getDrivingLeft()) {
+            driveSide = "left";
+        } else {
+            driveSide = "right";
+        }
         Log.d("AlertCheckerService", alerts.getNumberOfAlerts() + " alert points loaded");
     }
 
@@ -203,14 +209,13 @@ public class AlertCheckerService extends Service {
         Log.d("AlertCheckerService", "Alert type: " + alertPoint.getAlertType());
 
         String alertText;
-        String driveOn = "left";
 
         switch (alertPoint.getAlertType()) {
             case 10:
-                alertText = "Caution, the road becomes wider ahead. Keep " + driveOn;
+                alertText = "Caution, the road becomes wider ahead. Keep " + driveSide;
                 break;
             case 20:
-                alertText = "Caution, junction ahead with wider road. Keep " + driveOn;
+                alertText = "Caution, junction ahead with wider road. Keep " + driveSide;
                 break;
             default:
                 return;

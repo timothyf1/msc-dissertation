@@ -34,6 +34,7 @@ def find_alert_points(filename, dump=False, debug_file=False):
         json.dump(
             {
                 "area" : input_file[13:-4],
+                "driving_left" : True,
                 "alerts" : alertpoints
             },
             f,

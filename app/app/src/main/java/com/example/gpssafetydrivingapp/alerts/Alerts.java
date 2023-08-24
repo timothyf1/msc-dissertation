@@ -1,5 +1,6 @@
 package com.example.gpssafetydrivingapp.alerts;
 
+import com.google.gson.annotations.SerializedName;
 import com.javadocmd.simplelatlng.LatLng;
 
 import java.util.HashSet;
@@ -7,11 +8,15 @@ import java.util.HashSet;
 public class Alerts {
 
     private String area;
+    @SerializedName("driving_left")
+    private boolean drivingLeft;
     private HashSet<Alert> alerts;
 
     public int getNumberOfAlerts() {
         return alerts.size();
     }
+
+    public boolean getDrivingLeft() { return drivingLeft; }
 
     public Alert findNearest(double lat, double lon, int maxDistance) {
         double current_nearest_distance = maxDistance;
