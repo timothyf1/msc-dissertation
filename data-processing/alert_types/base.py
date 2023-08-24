@@ -21,24 +21,21 @@ class AlertType(ABC):
     Base class for checking and calclating alert points
     """
 
-    @staticmethod
     @abstractmethod
-    def alert_locations(G, node):
+    def alert_locations(self, G, node):
         pass
 
-    @staticmethod
-    def create_alert(alert_type, node, location):
+    def create_alert(self, node, location):
         return Alert(
             id = f"{node}{int(location['bearing'])}",
-            alert_type = alert_type,
+            alert_type = self.alert_type,
             node = node,
             latitude = location["latitude"],
             longitude = location["longitude"],
             bearing = location["bearing"]
         )
 
-    @staticmethod
-    def sort_roads(roads):
+    def sort_roads(self, roads):
         # Empty lists to store the roads connected to the node in question
         roads_single_lane = []
         roads_multi_lanes = []
@@ -66,9 +63,7 @@ class AlertType(ABC):
             "multi" : roads_multi_lanes
         }
 
-
-    @staticmethod
-    def find_alert_location(G, node, road, distance):
+    def find_alert_location(self, G, node, road, distance):
         """
         Calculates the alert location for a node along a given road and distance
 
@@ -134,3 +129,11 @@ class AlertType(ABC):
                         "longitude" : alert_location.longitude,
                         "bearing" : current_road[2]["bearing"]
                     }
+
+
+class TestAlertTypeInstance(AlertType):
+
+    alert_type = 0
+
+    def alert_locations(self, G, node):
+        pass

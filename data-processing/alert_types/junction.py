@@ -2,8 +2,9 @@ from alert_types.base import AlertType
 
 class Junction(AlertType):
 
-    @staticmethod
-    def alert_locations(G, node):
+    alert_type = 20
+
+    def alert_locations(self, G, node):
 
         # Check num of roads connected to node
         if G.node_num_of_roads(node) <= 2:
@@ -14,10 +15,10 @@ class Junction(AlertType):
             return []
 
         in_roads = G.in_edges(node, data=True)
-        in_road_lanes = AlertType.sort_roads(in_roads)
+        in_road_lanes = self.sort_roads(in_roads)
 
         out_roads = G.in_edges(node, data=True)
-        out_road_lanes = AlertType.sort_roads(out_roads)
+        out_road_lanes = self.sort_roads(out_roads)
 
         # Check for any incomming single-track roads
         if len(in_road_lanes["single"]) == 0:
@@ -29,6 +30,6 @@ class Junction(AlertType):
 
         alerts_points = []
         for road in in_road_lanes["single"]:
-            location = AlertType.find_alert_location(G, node, road, 50)
-            alerts_points.append(AlertType.create_alert(20, node, location))
+            location = self.find_alert_location(G, node, road, 50)
+            alerts_points.append(self.create_alert(node, location))
         return alerts_points
