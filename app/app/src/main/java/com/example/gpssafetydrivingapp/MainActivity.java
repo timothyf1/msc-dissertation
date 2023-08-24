@@ -81,6 +81,10 @@ public class MainActivity extends AppCompatActivity {
             navController.navigate(R.id.settingsFragment);
             return true;
         }
+        if (id == R.id.action_check_permissions) {
+            navController.navigate(R.id.permissionsCheckFragment);
+            return true;
+        }
         if (id == R.id.action_about) {
             navController.navigate(R.id.aboutFragment);
             return true;

@@ -9,6 +9,11 @@
         app:showAsAction="never"
         />
     <item
+        android:id="@+id/action_check_permissions"
+        android:title="@string/action_permissions"
+        android:orderInCategory="105"
+        />
+    <item
         android:id="@+id/action_about"
         android:title="@string/action_about"
         android:orderInCategory="110"

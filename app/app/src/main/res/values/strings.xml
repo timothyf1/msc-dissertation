@@ -10,6 +10,7 @@
 
     <!-- Menu options -->
     <string name="action_about">About</string>
+    <string name="action_permissions">Check Permissions</string>
     <string name="action_settings">Settings</string>
 
     <!-- Home fragment text -->
