@@ -36,7 +36,8 @@
     <fragment
         android:id="@+id/permissionsCheckFragment"
         android:name="com.example.gpssafetydrivingapp.permissionscheck.PermissionsCheckFragment"
-        android:label="@string/permissions_check">
+        android:label="@string/permissions_check"
+        tools:layout="@layout/fragment_permissions_check">
         <action
             android:id="@+id/action_permissionsCheckFragment_to_permissionsCheckLocationFragment2"
             app:destination="@id/permissionsCheckLocationFragment" />
@@ -44,7 +45,8 @@
     <fragment
         android:id="@+id/permissionsCheckLocationFragment"
         android:name="com.example.gpssafetydrivingapp.permissionscheck.PermissionsCheckLocationFragment"
-        android:label="@string/location_permissions" />
+        android:label="@string/location_permissions"
+        tools:layout="@layout/fragment_permissions_check_location"/>
     <fragment
         android:id="@+id/settingsAlertTypeFragment"
         android:name="com.example.gpssafetydrivingapp.SettingsAlertTypeFragment"
