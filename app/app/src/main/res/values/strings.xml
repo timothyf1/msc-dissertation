@@ -14,7 +14,7 @@
     <string name="action_settings">Settings</string>
 
     <!-- Home fragment text -->
-    <string name="app_is_currently">App is currently</string>
+    <string name="app_is_currently">Current status of alerts</string>
     <string name="inactive">Inactive</string>
     <string name="activate">Activate</string>
     <string name="active">Active</string>
