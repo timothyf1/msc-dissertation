@@ -41,7 +41,6 @@ public class AlertCheckerService extends Service {
     private Alerts alerts;
     private Alert lastAlert;
     private long lastAlertTime;
-    private String driveSide;
 
     @Nullable
     @Override
@@ -67,15 +66,11 @@ public class AlertCheckerService extends Service {
             }
         });
 
+        // Create and show the notification for the service
         makeAlertActiveNotification();
         
-        Log.d("AlertCheckerService", "Loading alert points");
+        // Load alert points from JSON file
         alerts = loadAlertPoints();
-        if (alerts.getDrivingLeft()) {
-            driveSide = "left";
-        } else {
-            driveSide = "right";
-        }
         Log.d("AlertCheckerService", alerts.getNumberOfAlerts() + " alert points loaded");
     }
 
@@ -115,12 +110,18 @@ public class AlertCheckerService extends Service {
         startForeground(1, notification);
     }
 
+    /**
+     * Method to read JSON files
+     * Adapted from stackoverflow post by faraz khonsari 2020-11-04
+     * https://stackoverflow.com/a/45177069
+     * Accessed 2023-07-10
+     * @return Alerts object containing the alerts
+     */
     private Alerts loadAlertPoints() {
         String myJson = inputStreamToString(getApplicationContext().getResources().openRawResource(R.raw.alerts_silchester));
         return new Gson().fromJson(myJson, Alerts.class);
     }
 
-    // https://stackoverflow.com/a/45177069
     private String inputStreamToString(InputStream inputStream) {
         try {
             byte[] bytes = new byte[inputStream.available()];
@@ -130,22 +131,29 @@ public class AlertCheckerService extends Service {
             return null;
         }
     }
+    /* End of referenced code */
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("AlertCheckerService", "Starting AlertCheckerService");
+        // Note permissions checks are done before the service starts
         fusedLocationClient.requestLocationUpdates(locationRequest, locationListener, Looper.getMainLooper());
-        Log.d("AlertCheckerService", "AlertCheckerService Started");
+        Log.d("AlertCheckerService", "Location updates requested");
         return START_STICKY;
     }
 
+    // Runs when stopping the service to remove the location updates
     @Override
     public void onDestroy() {
         Log.d("AlertCheckerService", "Stopping AlertCheckerService");
         fusedLocationClient.removeLocationUpdates(locationListener);
-        Log.d("AlertCheckerService", "AlertChecker Stopped");
+        Log.d("AlertCheckerService", "Location updates removed");
     }
 
+    /**
+     * Method to check if there is a valid alert for the given location.
+     * @param location the location to be checked for an alert
+     */
     public void checkLocationAlert (Location location) {
         Log.d("AlertCheckerService", "Location Received" + location.toString());
 
@@ -184,11 +192,18 @@ public class AlertCheckerService extends Service {
             return;
         }
 
+        // New valid alert updating variables related to last found alert
         lastAlertTime = System.currentTimeMillis();
         lastAlert = nearestAlert;
+
         createAlert(nearestAlert);
     }
 
+    /**
+     * Method to check if an alert type is active
+     * @param alertType An integer define the alert type which is to be checked
+     * @return boolean true if the alert type is currently active
+     */
     private boolean checkAlertTypeSettings(int alertType) {
         String alertTypeSetting = "switch_alert_type_" + alertType;
         boolean alertTypeActive = sharedPreferences.getBoolean(alertTypeSetting, false);
@@ -197,6 +212,11 @@ public class AlertCheckerService extends Service {
         return allAlertTypes || alertTypeActive;
     }
 
+    /**
+     * Method to check if found alert point is the last alert given within a time period
+     * @param candidateAlert The candidate alert point found
+     * @return boolean ture if the alert was the last activated alert within the time period
+     */
     private boolean checkLastAlert(Alert candidateAlert) {
         if (lastAlert == candidateAlert) {
             long timeDifference = System.currentTimeMillis() - lastAlertTime;
@@ -205,11 +225,18 @@ public class AlertCheckerService extends Service {
         return false;
     }
 
+    /**
+     * Method to create an audible alert given an alert point
+     * @param alertPoint the alert details we are making the alert for
+     */
     private void createAlert(Alert alertPoint) {
         Log.d("AlertCheckerService", "Alert type: " + alertPoint.getAlertType());
 
         String alertText;
 
+        // Finding the correct alert message
+        // First switch on the alert type
+        // Then check for left or right side driving on the road
         switch (alertPoint.getAlertType()) {
             case 10:
                 alertText = alerts.getDrivingLeft()
