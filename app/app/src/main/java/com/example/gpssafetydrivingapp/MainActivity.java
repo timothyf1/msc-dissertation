@@ -151,6 +151,10 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Checks to see if there are any missing permissions for the alert checker service to run
+     * @return boolean true if there is a missing permission
+     */
     public boolean checkMissingPermissions() {
         // Check for notifications
         if (ContextCompat.checkSelfPermission(getApplicationContext(), POST_NOTIFICATIONS) == PackageManager.PERMISSION_DENIED) {
