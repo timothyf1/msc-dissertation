@@ -212,10 +212,14 @@ public class AlertCheckerService extends Service {
 
         switch (alertPoint.getAlertType()) {
             case 10:
-                alertText = "Caution, the road becomes wider ahead. Keep " + driveSide;
+                alertText = alerts.getDrivingLeft()
+                        ? getResources().getString(R.string.alert_type10_left)
+                        : getResources().getString(R.string.alert_type10_right);
                 break;
             case 20:
-                alertText = "Caution, junction ahead with wider road. Keep " + driveSide;
+                alertText = alerts.getDrivingLeft()
+                        ? getResources().getString(R.string.alert_type20_left)
+                        : getResources().getString(R.string.alert_type20_right);
                 break;
             default:
                 return;
