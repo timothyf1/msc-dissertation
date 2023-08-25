@@ -48,12 +48,22 @@ public class Alert {
         return Integer.parseInt(node);
     }
 
-    public boolean checkBearing(double currentBearing) {
-        return Math.abs(currentBearing - Double.parseDouble(bearing)) < 75;
+    /**
+     * Check to see if an alert is valid given a bearing
+     * @param testBearing the bearing to check if an alert is valid
+     * @return boolean true if the alert is valid
+     */
+    public boolean checkBearing(double testBearing) {
+        return Math.abs(testBearing - Double.parseDouble(bearing)) < 75;
     }
 
-    public double distance(LatLng currentLocation) {
+    /**
+     * Calculation to find the distance from the alert point
+     * @param testLocation the location to be checked
+     * @return double the distance from the provided location to the alert point
+     */
+    public double distance(LatLng testLocation) {
         LatLng alertLocation = new LatLng(getLatitude(), getLongitude());
-        return LatLngTool.distance(currentLocation, alertLocation, LengthUnit.METER);
+        return LatLngTool.distance(testLocation, alertLocation, LengthUnit.METER);
     }
 }

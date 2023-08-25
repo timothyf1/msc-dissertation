@@ -18,6 +18,13 @@ public class Alerts {
 
     public boolean getDrivingLeft() { return drivingLeft; }
 
+    /**
+     * Find the nearest alert to a given location within a maximum distance
+     * @param lat the latitude of the location to check
+     * @param lon the longitude of the location to check
+     * @param maxDistance the maximum distance an alert can be from the provided location
+     * @return The nearest Alert if there is one within the maximum distance
+     */
     public Alert findNearest(double lat, double lon, int maxDistance) {
         double current_nearest_distance = maxDistance;
         Alert current_nearest_alert = null;
