@@ -22,6 +22,7 @@ import androidx.preference.PreferenceManager;
 
 import com.example.gpssafetydrivingapp.alerts.AlertCheckerService;
 import com.example.gpssafetydrivingapp.databinding.ActivityMainBinding;
+import com.google.android.material.color.DynamicColors;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        DynamicColors.applyToActivityIfAvailable(this);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
