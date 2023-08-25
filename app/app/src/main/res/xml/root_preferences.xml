@@ -12,16 +12,14 @@
             android:defaultValue="true"
             android:key="switch_all_alerts"
             android:title="@string/all_alert_types"
-            app:dependency="switch_alerts_enable"
             app:disableDependentsState="true"
-            app:summaryOff="@string/all_alert_types_on"
-            app:summaryOn="@string/all_alert_types_off" />
+            app:summaryOn="@string/all_alert_types_on"
+            app:summaryOff="@string/all_alert_types_off" />
 
         <Preference
             android:key="alert_types"
-            android:title="Alert Types"
+            android:title="Select Alert Types"
             app:dependency="switch_all_alerts"
-            app:disableDependentsState="false"
         />
 
     </PreferenceCategory>
