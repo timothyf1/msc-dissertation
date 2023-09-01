@@ -41,7 +41,7 @@ public class AlertCheckerService extends Service {
     private SharedPreferences sharedPreferences;
     private TextToSpeech textToSpeech;
 
-    private Alerts alerts;
+    private AlertsArea alerts;
     private long[] lastAlertTimes;
 
     @Nullable
@@ -124,11 +124,11 @@ public class AlertCheckerService extends Service {
      * Accessed 2023-07-10
      * @return Alerts object containing the alerts
      */
-    private Alerts loadAlertPoints() {
+    private AlertsArea loadAlertPoints() {
         String myJson = inputStreamToString(
                 getApplicationContext().getResources().openRawResource(R.raw.alerts_silchester)
         );
-        return new Gson().fromJson(myJson, Alerts.class);
+        return new Gson().fromJson(myJson, AlertsArea.class);
     }
 
     private String inputStreamToString(InputStream inputStream) {

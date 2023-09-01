@@ -5,7 +5,7 @@ import com.javadocmd.simplelatlng.LatLng;
 
 import java.util.HashSet;
 
-public class Alerts {
+public class AlertsArea {
 
     private String area;
     @SerializedName("driving_left")
