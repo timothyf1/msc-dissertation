@@ -1,4 +1,4 @@
-package com.example.gpssafetydrivingapp;
+package com.example.gpssafetydrivingapp.settings;
 
 import android.os.Bundle;
 import android.view.View;
@@ -9,9 +9,9 @@ import androidx.navigation.Navigation;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
-public class SettingsFragment extends PreferenceFragmentCompat {
+import com.example.gpssafetydrivingapp.R;
 
-    private Preference alertTypePreference;
+public class SettingsFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -22,12 +22,21 @@ public class SettingsFragment extends PreferenceFragmentCompat {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        alertTypePreference = getPreferenceManager().findPreference("alert_types");
+        Preference alertTypePreference = getPreferenceManager().findPreference("alert_types");
 
         assert alertTypePreference != null;
         alertTypePreference.setOnPreferenceClickListener(preference -> {
             Navigation.findNavController(view).navigate(R.id.settingsAlertTypeFragment);
             return false;
         });
+
+        Preference advancePreference = getPreferenceManager().findPreference("advance_options");
+
+        assert advancePreference != null;
+        advancePreference.setOnPreferenceClickListener(preference -> {
+            Navigation.findNavController(view).navigate(R.id.settingsAdvanceAlertOptionsFragment);
+            return false;
+        });
+
     }
 }

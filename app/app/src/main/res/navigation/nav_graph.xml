@@ -22,11 +22,14 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.gpssafetydrivingapp.SettingsFragment"
+        android:name="com.example.gpssafetydrivingapp.settings.SettingsFragment"
         android:label="@string/settings" >
         <action
             android:id="@+id/action_settingsFragment_to_settingsAlertTypeFragment"
             app:destination="@id/settingsAlertTypeFragment" />
+        <action
+            android:id="@+id/action_settingsFragment_to_settingsAdvanceAlertOptionsFragment"
+            app:destination="@id/settingsAdvanceAlertOptionsFragment" />
     </fragment>
     <fragment
         android:id="@+id/aboutFragment"
@@ -49,6 +52,10 @@
         tools:layout="@layout/fragment_permissions_check_location"/>
     <fragment
         android:id="@+id/settingsAlertTypeFragment"
-        android:name="com.example.gpssafetydrivingapp.SettingsAlertTypeFragment"
+        android:name="com.example.gpssafetydrivingapp.settings.SettingsAlertTypeFragment"
         android:label="@string/select_alert_types" />
+    <fragment
+        android:id="@+id/settingsAdvanceAlertOptionsFragment"
+        android:name="com.example.gpssafetydrivingapp.settings.SettingsAdvanceAlertOptionsFragment"
+        android:label="@string/advance_alert_options" />
 </navigation>

@@ -48,7 +48,6 @@ dependencies {
     implementation 'androidx.work:work-runtime:2.8.1'
     implementation 'androidx.work:work-runtime-ktx:2.8.1'
     implementation 'androidx.work:work-multiprocess:2.8.1'
-    implementation 'io.oss84.geotools:geotools:24.2-oss84-1'
     implementation 'com.javadocmd:simplelatlng:1.4.0'
     implementation 'com.google.code.gson:gson:2.8.1'
     testImplementation 'junit:junit:4.13.2'

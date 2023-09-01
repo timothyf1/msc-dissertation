@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        android:key="advance_options_info"
+        android:title="@string/advance_alert_options_info" />
+
+    <SeekBarPreference
+        android:defaultValue="45"
+        android:key="adv_bearing"
+        android:max="80"
+        android:min="20"
+        android:title="@string/adv_bearing"
+        app:showSeekBarValue="true"
+        app:singleLineTitle="false"
+        app:summary="" />
+
+</PreferenceScreen>

@@ -13,14 +13,13 @@
             android:key="switch_all_alerts"
             android:title="@string/all_alert_types"
             app:disableDependentsState="true"
-            app:summaryOn="@string/all_alert_types_on"
-            app:summaryOff="@string/all_alert_types_off" />
+            app:summaryOff="@string/all_alert_types_off"
+            app:summaryOn="@string/all_alert_types_on" />
 
         <Preference
             android:key="alert_types"
-            android:title="Select Alert Types"
-            app:dependency="switch_all_alerts"
-        />
+            android:title="@string/select_alert_types"
+            app:dependency="switch_all_alerts" />
 
     </PreferenceCategory>
 
@@ -44,6 +43,11 @@
             app:showSeekBarValue="true"
             app:singleLineTitle="false"
             app:summary="@string/min_time_info" />
+
+        <Preference
+            android:key="advance_options"
+            android:title="@string/advance_alert_options" />
+
     </PreferenceCategory>
 
 </PreferenceScreen>

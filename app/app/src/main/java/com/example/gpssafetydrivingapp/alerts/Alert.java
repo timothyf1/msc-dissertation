@@ -32,13 +32,18 @@ public class Alert {
         return alertType;
     }
 
+    public double getBearing() {
+        return bearing;
+    }
+
     /**
      * Check to see if an alert is valid given a bearing
      * @param testBearing the bearing to check if an alert is valid
+     * @param bearingAllowance the bearing allowance allowed when checking the bearing
      * @return boolean true if the alert is valid
      */
-    public boolean checkBearing(double testBearing) {
-        return Math.abs(testBearing - bearing) < 75;
+    public boolean checkBearing(double testBearing, int bearingAllowance) {
+        return Math.abs(testBearing - bearing) < bearingAllowance;
     }
 
     /**

@@ -193,8 +193,13 @@ public class AlertCheckerService extends Service {
         }
 
         // Check the direction of travel to the direction of the alert
-        if (!nearestAlert.checkBearing(location.getBearing())) {
-            Log.d("AlertCheckerService", "Bearing is invalid for alert point");
+        int bearingSetting = sharedPreferences.getInt("adv_bearing", 45);
+        if (!nearestAlert.checkBearing(location.getBearing(), bearingSetting)) {
+            Log.d(
+                    "AlertCheckerService",
+                    "Current bearing " + location.getBearing() + " is not within the permitted "
+                            + bearingSetting + " degrees of the alert bearing of " + nearestAlert.getBearing()
+            );
             return;
         }
 
@@ -280,8 +285,6 @@ public class AlertCheckerService extends Service {
         }
 
         Log.d("AlertCheckerService", "Alert text: " + alertText);
-
-        Log.d("AlertCheckerService", "Creating alert notification");
 
         textToSpeech.speak(alertText, TextToSpeech.QUEUE_FLUSH, null, null);
     }

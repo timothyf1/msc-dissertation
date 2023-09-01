@@ -1,8 +1,10 @@
-package com.example.gpssafetydrivingapp;
+package com.example.gpssafetydrivingapp.settings;
 
 import android.os.Bundle;
 
 import androidx.preference.PreferenceFragmentCompat;
+
+import com.example.gpssafetydrivingapp.R;
 
 public class SettingsAlertTypeFragment extends PreferenceFragmentCompat {
 
