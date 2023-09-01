@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="settings_driving_alerts">Driving Alerts</string>
+
+    <string name="alert_types">Alert Types</string>
+    <string name="all_alert_types">All Alert Types</string>
+    <string name="all_alert_types_on">All Alert types are enabled</string>
+    <string name="all_alert_types_off">Please click below to select alert types</string>
+
+    <string name="select_alert_types">Select Alert Types</string>
+    <string name="road_widens">Road Widens</string>
+    <string name="junction">Junction</string>
+
+    <string name="alert_options">Alert Options</string>
+
+    <string name="min_speed">Minimum speed for alerts</string>
+    <string name="min_speed_info">When travelling below this speed alerts will not sound</string>
+
+    <string name="min_time">Minimum time between alerts</string>
+    <string name="min_time_info">The minimal time in seconds between alerts of the same type sound</string>
+</resources>

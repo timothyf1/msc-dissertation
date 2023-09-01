@@ -23,22 +23,6 @@
     <string name="check_permissions">Check Permissions</string>
     <string name="settings">Settings</string>
 
-    <!-- Settings -->
-    <string name="settings_driving_alerts">Driving Alerts</string>
-
-    <string name="alert_types">Alert Types</string>
-    <string name="all_alert_types">All Alert Types</string>
-    <string name="all_alert_types_on">All Alert types are enabled</string>
-    <string name="all_alert_types_off">Please click below to select alert types</string>
-
-    <string name="select_alert_types">Select Alert Types</string>
-    <string name="road_widens">Road Widens</string>
-    <string name="junction">Junction</string>
-
-    <string name="alert_options">Alert Options</string>
-    <string name="min_speed">Minimum speed for alerts</string>
-    <string name="min_speed_info">When travelling below this speed alerts will not be created</string>
-
     <!-- Permission Check -->
     <string name="permissions_check">Permissions Check</string>
     <string name="permissions_back_info">Precise location needs to granted before background location.</string>

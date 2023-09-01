@@ -39,8 +39,7 @@ public class AlertCheckerService extends Service {
     private TextToSpeech textToSpeech;
 
     private Alerts alerts;
-    private Alert lastAlert;
-    private long lastAlertTime;
+    private long[] lastAlertTimes;
 
     @Nullable
     @Override
@@ -94,7 +93,12 @@ public class AlertCheckerService extends Service {
         // Intent for stop button on notification
         Intent stopAlertIntent = new Intent(getApplicationContext(), AlertStopActionReceiver.class);
         stopAlertIntent.putExtra("action", "stopAlerts");
-        PendingIntent stopAlertPendingIntent = PendingIntent.getBroadcast(getApplicationContext(), 0, stopAlertIntent, PendingIntent.FLAG_IMMUTABLE);
+        PendingIntent stopAlertPendingIntent = PendingIntent.getBroadcast(
+                getApplicationContext(),
+                0,
+                stopAlertIntent,
+                PendingIntent.FLAG_IMMUTABLE
+        );
 
         // Create the notification
         Notification notification = new NotificationCompat.Builder(getApplicationContext(), "ALERTS_ACTIVE")
@@ -118,7 +122,9 @@ public class AlertCheckerService extends Service {
      * @return Alerts object containing the alerts
      */
     private Alerts loadAlertPoints() {
-        String myJson = inputStreamToString(getApplicationContext().getResources().openRawResource(R.raw.alerts_silchester));
+        String myJson = inputStreamToString(
+                getApplicationContext().getResources().openRawResource(R.raw.alerts_silchester)
+        );
         return new Gson().fromJson(myJson, Alerts.class);
     }
 
@@ -131,7 +137,7 @@ public class AlertCheckerService extends Service {
             return null;
         }
     }
-    /* End of referenced code */
+    /** End of referenced code */
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
@@ -139,6 +145,8 @@ public class AlertCheckerService extends Service {
         // Note permissions checks are done before the service starts
         fusedLocationClient.requestLocationUpdates(locationRequest, locationListener, Looper.getMainLooper());
         Log.d("AlertCheckerService", "Location updates requested");
+
+        lastAlertTimes = new long[40];
         return START_STICKY;
     }
 
@@ -168,7 +176,10 @@ public class AlertCheckerService extends Service {
 
         // Check to see if the alert type is active
         if (!checkAlertTypeSettings(nearestAlert.getAlertType())) {
-            Log.d("AlertCheckerService", "Alert type " + nearestAlert.getAlertType() + " is currently disabled");
+            Log.d(
+                    "AlertCheckerService",
+                    "Alert type " + nearestAlert.getAlertType() + " is currently disabled"
+            );
             return;
         }
 
@@ -179,22 +190,30 @@ public class AlertCheckerService extends Service {
         }
 
         // Get speed setting and convert to mph
-        double speedMin = sharedPreferences.getInt("min_alert_speed", 0) * 0.44707;
+        int speedMin = sharedPreferences.getInt("min_alert_speed", 0);
         // Check speed
-        if (location.getSpeed() < speedMin) {
-            Log.d("AlertCheckerService", "Speed below minimal speed");
+        if (location.getSpeed() < (speedMin * 0.44707)) {
+            Log.d(
+                    "AlertCheckerService",
+                    "Speed below minimal speed of " + speedMin + " mph."
+            );
             return;
         }
 
         // Check against last alert and its timing
-        if (checkLastAlert(nearestAlert)) {
-            Log.d("AlertCheckerService", "Nearest Alert is the last activated alert within 60 seconds. Skipping making alert");
+        if (checkLastAlertTime(nearestAlert)) {
+            int timeSeconds = sharedPreferences.getInt("min_time_between_alerts", 40);
+            Log.d(
+                    "AlertCheckerService",
+                    "Alert type last activated within "
+                            + timeSeconds + " seconds. Skipping making alert"
+            );
             return;
         }
 
         // New valid alert updating variables related to last found alert
-        lastAlertTime = System.currentTimeMillis();
-        lastAlert = nearestAlert;
+        lastAlertTimes[nearestAlert.getAlertType()] = System.currentTimeMillis();
+//        lastAlert = nearestAlert;
 
         createAlert(nearestAlert);
     }
@@ -213,16 +232,16 @@ public class AlertCheckerService extends Service {
     }
 
     /**
-     * Method to check if found alert point is the last alert given within a time period
+     * Method to check if the type of the found alert point, has been produced within the time
+     * period the user has set in the applications settings
      * @param candidateAlert The candidate alert point found
-     * @return boolean ture if the alert was the last activated alert within the time period
+     * @return boolean ture if the alert type the last activated alert within the time period
      */
-    private boolean checkLastAlert(Alert candidateAlert) {
-        if (lastAlert == candidateAlert) {
-            long timeDifference = System.currentTimeMillis() - lastAlertTime;
-            return timeDifference < 60000;
-        }
-        return false;
+    private boolean checkLastAlertTime(Alert candidateAlert) {
+        long timeDifference = System.currentTimeMillis()
+                - lastAlertTimes[candidateAlert.getAlertType()];
+        long timeBetweenAlerts = sharedPreferences.getInt("min_time_between_alerts", 40);
+        return timeDifference < (timeBetweenAlerts * 1000);
     }
 
     /**

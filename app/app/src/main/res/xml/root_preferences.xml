@@ -31,11 +31,19 @@
             android:max="40"
             android:min="0"
             android:title="@string/min_speed"
-            app:dependency="switch_alerts_enable"
             app:showSeekBarValue="true"
             app:singleLineTitle="false"
             app:summary="@string/min_speed_info" />
 
+        <SeekBarPreference
+            android:defaultValue="40"
+            android:key="min_time_between_alerts"
+            android:max="120"
+            android:min="0"
+            android:title="@string/min_time"
+            app:showSeekBarValue="true"
+            app:singleLineTitle="false"
+            app:summary="@string/min_time_info" />
     </PreferenceCategory>
 
 </PreferenceScreen>
