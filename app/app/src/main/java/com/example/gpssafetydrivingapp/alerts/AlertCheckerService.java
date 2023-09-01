@@ -32,6 +32,9 @@ import java.util.Locale;
 
 public class AlertCheckerService extends Service {
 
+    private final int DISTANCE_FROM_ALERT = 40;
+    private final int TIME_BETWEEN_LOCATION_REQUESTS = 4000;
+
     private FusedLocationProviderClient fusedLocationClient;
     private LocationListener locationListener;
     private LocationRequest locationRequest;
@@ -52,7 +55,7 @@ public class AlertCheckerService extends Service {
         super.onCreate();
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
-        locationRequest = new LocationRequest.Builder(4000)
+        locationRequest = new LocationRequest.Builder(TIME_BETWEEN_LOCATION_REQUESTS)
                 .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
                 .build();
 
@@ -146,7 +149,7 @@ public class AlertCheckerService extends Service {
         fusedLocationClient.requestLocationUpdates(locationRequest, locationListener, Looper.getMainLooper());
         Log.d("AlertCheckerService", "Location updates requested");
 
-        lastAlertTimes = new long[40];
+        lastAlertTimes = new long[100];
         return START_STICKY;
     }
 
@@ -165,11 +168,17 @@ public class AlertCheckerService extends Service {
     public void checkLocationAlert (Location location) {
         Log.d("AlertCheckerService", "Location Received" + location.toString());
 
-        Alert nearestAlert = alerts.findNearest(location.getLatitude(), location.getLongitude(), 40);
+        Alert nearestAlert = alerts.findNearest(
+                location.getLatitude(),
+                location.getLongitude(),
+                DISTANCE_FROM_ALERT
+        );
 
         // Check to see if there is a alert found
         if (nearestAlert == null) {
-            Log.d("AlertCheckerService", "Could not alert point within 40 meters");
+            Log.d(
+                    "AlertCheckerService",
+                    "Could not alert point within " + DISTANCE_FROM_ALERT + " meters");
             return;
         }
         Log.d("AlertCheckerService", "Nearest Alert id: " + nearestAlert.getId());
@@ -201,8 +210,8 @@ public class AlertCheckerService extends Service {
         }
 
         // Check against last alert and its timing
-        if (checkLastAlertTime(nearestAlert)) {
-            int timeSeconds = sharedPreferences.getInt("min_time_between_alerts", 40);
+        int timeSeconds = sharedPreferences.getInt("min_time_between_alerts", 40);
+        if (checkLastAlertTime(nearestAlert, timeSeconds)) {
             Log.d(
                     "AlertCheckerService",
                     "Alert type last activated within "
@@ -213,7 +222,6 @@ public class AlertCheckerService extends Service {
 
         // New valid alert updating variables related to last found alert
         lastAlertTimes[nearestAlert.getAlertType()] = System.currentTimeMillis();
-//        lastAlert = nearestAlert;
 
         createAlert(nearestAlert);
     }
@@ -235,13 +243,13 @@ public class AlertCheckerService extends Service {
      * Method to check if the type of the found alert point, has been produced within the time
      * period the user has set in the applications settings
      * @param candidateAlert The candidate alert point found
+     * @param timeSeconds The minimal time in seconds allowed between alerts
      * @return boolean ture if the alert type the last activated alert within the time period
      */
-    private boolean checkLastAlertTime(Alert candidateAlert) {
+    private boolean checkLastAlertTime(Alert candidateAlert, int timeSeconds) {
         long timeDifference = System.currentTimeMillis()
                 - lastAlertTimes[candidateAlert.getAlertType()];
-        long timeBetweenAlerts = sharedPreferences.getInt("min_time_between_alerts", 40);
-        return timeDifference < (timeBetweenAlerts * 1000);
+        return timeDifference < (timeSeconds * 1000L);
     }
 
     /**
