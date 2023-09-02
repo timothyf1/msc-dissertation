@@ -5,4 +5,6 @@
 
     <string name="alert_type20_left">Caution, junction ahead with wider road. Keep left.</string>
     <string name="alert_type20_right">Caution, junction ahead with wider road. Keep right.</string>
+
+    <string name="alert_type30">Caution, level crossing ahead.</string>
 </resources>

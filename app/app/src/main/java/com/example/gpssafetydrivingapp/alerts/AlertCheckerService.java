@@ -1,5 +1,6 @@
 package com.example.gpssafetydrivingapp.alerts;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -142,9 +143,11 @@ public class AlertCheckerService extends Service {
     }
     /** End of referenced code */
 
+    @SuppressLint("MissingPermission")
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("AlertCheckerService", "Starting AlertCheckerService");
+
         // Note permissions checks are done before the service starts
         fusedLocationClient.requestLocationUpdates(locationRequest, locationListener, Looper.getMainLooper());
         Log.d("AlertCheckerService", "Location updates requested");
@@ -279,6 +282,9 @@ public class AlertCheckerService extends Service {
                 alertText = alerts.getDrivingLeft()
                         ? getResources().getString(R.string.alert_type20_left)
                         : getResources().getString(R.string.alert_type20_right);
+                break;
+            case 30:
+                alertText = getResources().getString(R.string.alert_type30);
                 break;
             default:
                 return;

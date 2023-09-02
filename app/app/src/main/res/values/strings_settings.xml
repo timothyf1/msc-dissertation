@@ -2,25 +2,26 @@
 <resources>
     <string name="settings_driving_alerts">Driving Alerts</string>
 
-    <string name="alert_types">Alert Types</string>
-    <string name="all_alert_types">All Alert Types</string>
-    <string name="all_alert_types_on">All Alert types are enabled</string>
-    <string name="all_alert_types_off">Please click below to select alert types</string>
+    <string name="settings_alert_types">Alert Types</string>
+    <string name="settings_all_alert_types">All Alert Types</string>
+    <string name="settings_all_alert_types_on">All Alert types are enabled</string>
+    <string name="settings_all_alert_types_off">Please click below to select alert types</string>
 
-    <string name="select_alert_types">Select Alert Types</string>
-    <string name="road_widens">Road Widens</string>
-    <string name="junction">Junction</string>
+    <string name="settings_select_alert_types">Select Alert Types</string>
+    <string name="settings_road_widens">Road Widens</string>
+    <string name="settings_junction">Junction</string>
+    <string name="settings_level_crossing">Level Crossing</string>
 
-    <string name="alert_options">Alert Options</string>
+    <string name="settings_alert_options">Alert Options</string>
 
-    <string name="min_speed">Minimum speed for alerts</string>
-    <string name="min_speed_info">When travelling below this speed alerts will not sound</string>
+    <string name="settings_min_speed">Minimum speed for alerts</string>
+    <string name="settings_min_speed_info">When travelling below this speed alerts will not sound</string>
 
-    <string name="min_time">Minimum time between alerts</string>
-    <string name="min_time_info">The minimal time in seconds between alerts of the same type sound</string>
+    <string name="settings_min_time">Minimum time between alerts</string>
+    <string name="settings_min_time_info">The minimal time in seconds between alerts of the same type sound</string>
 
     <string name="advance_alert_options">Advance Alert Options</string>
     <string name="advance_alert_options_info">The options on this page are for fine tuning the alert checker.\nIn most cases the default settings will fine.</string>
 
-    <string name="adv_bearing">The bearing offset allowed when checking the direction of alerts</string>
+    <string name="advance_bearing">The bearing offset allowed when checking the direction of alerts</string>
 </resources>

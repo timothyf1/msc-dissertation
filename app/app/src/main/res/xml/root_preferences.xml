@@ -6,43 +6,43 @@
         android:key="switch_alerts_enable"
         android:title="@string/settings_driving_alerts" />
 
-    <PreferenceCategory android:title="@string/alert_types">
+    <PreferenceCategory android:title="@string/settings_alert_types">
 
         <SwitchPreference
             android:defaultValue="true"
             android:key="switch_all_alerts"
-            android:title="@string/all_alert_types"
+            android:title="@string/settings_all_alert_types"
             app:disableDependentsState="true"
-            app:summaryOff="@string/all_alert_types_off"
-            app:summaryOn="@string/all_alert_types_on" />
+            app:summaryOff="@string/settings_all_alert_types_off"
+            app:summaryOn="@string/settings_all_alert_types_on" />
 
         <Preference
             android:key="alert_types"
-            android:title="@string/select_alert_types"
+            android:title="@string/settings_select_alert_types"
             app:dependency="switch_all_alerts" />
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/alert_options">
+    <PreferenceCategory android:title="@string/settings_alert_options">
         <SeekBarPreference
             android:defaultValue="10"
             android:key="min_alert_speed"
             android:max="40"
             android:min="0"
-            android:title="@string/min_speed"
+            android:title="@string/settings_min_speed"
             app:showSeekBarValue="true"
             app:singleLineTitle="false"
-            app:summary="@string/min_speed_info" />
+            app:summary="@string/settings_min_speed_info" />
 
         <SeekBarPreference
             android:defaultValue="40"
             android:key="min_time_between_alerts"
             android:max="120"
             android:min="0"
-            android:title="@string/min_time"
+            android:title="@string/settings_min_time"
             app:showSeekBarValue="true"
             app:singleLineTitle="false"
-            app:summary="@string/min_time_info" />
+            app:summary="@string/settings_min_time_info" />
 
         <Preference
             android:key="advance_options"

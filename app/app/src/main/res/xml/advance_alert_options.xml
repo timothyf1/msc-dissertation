@@ -11,7 +11,7 @@
         android:key="adv_bearing"
         android:max="80"
         android:min="20"
-        android:title="@string/adv_bearing"
+        android:title="@string/advance_bearing"
         app:showSeekBarValue="true"
         app:singleLineTitle="false"
         app:summary="" />
