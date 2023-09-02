@@ -13,7 +13,7 @@ class RoadWidens(AlertType):
             out_road_lanes = self.sort_roads(out_roads)
 
             if len(in_road_lanes["single"]) > 0 and len(out_road_lanes["multi"]) > 0:
-                location = self.find_alert_location(G, node, in_road_lanes["single"][0], 50)
+                location = self.find_alert_location(G, node, in_road_lanes["single"][0])
                 return [self.create_alert(node, location)]
 
         return []

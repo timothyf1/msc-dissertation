@@ -21,6 +21,8 @@ class AlertType(ABC):
     Base class for checking and calclating alert points
     """
 
+    distance_for_alert = 50
+
     @abstractmethod
     def alert_locations(self, G, node):
         pass
@@ -63,7 +65,7 @@ class AlertType(ABC):
             "multi" : roads_multi_lanes
         }
 
-    def find_alert_location(self, G, node, road, distance):
+    def find_alert_location(self, G, node, road, distance=distance_for_alert):
         """
         Calculates the alert location for a node along a given road and distance
 

@@ -20,6 +20,11 @@ class Graph(MultiDiGraph):
         Returns:
             Graph
         """
+
+        # Adding railway key to list of tags to keep for nodes
+        tags_for_nodes = ox.settings.useful_tags_node + ["railway"]
+        ox.utils.config(useful_tags_node=tags_for_nodes)
+
         G = ox.graph_from_xml(f"{filename}", simplify=False, retain_all=True)
         G = ox.bearing.add_edge_bearings(G, precision=5)
         G.__class__ = Graph
@@ -93,4 +98,20 @@ class Graph(MultiDiGraph):
         for road in roads:
             if road[2].get("junction") in ["roundabout", "circular"]:
                 return True
+        return False
+
+    def node_level_crossing(self, node):
+        """
+        Check to see if the node is a level crossing
+
+        Arguments
+            node: The node we wish to check
+
+        Returns
+            boolean: True if the node is a level crossing
+        """
+
+        if self.nodes[node].get("railway") == "level_crossing":
+            return True
+
         return False
