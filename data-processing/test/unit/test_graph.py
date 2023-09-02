@@ -125,3 +125,16 @@ class TestGraph(unittest.TestCase):
         alert_points = G.all_alert_points()
 
         assert len(alert_points) == 4
+
+    def test_node_level_crossing(self):
+        G = Graph.create_map_graph("test/osm-data/graph/map_level_crossing.osm")
+
+        assert G.node_level_crossing(-102175) == False
+        assert G.node_level_crossing(-102176) == False
+        assert G.node_level_crossing(-102177) == True
+        assert G.node_level_crossing(-102178) == False
+        assert G.node_level_crossing(-102179) == False
+        assert G.node_level_crossing(-102180) == False
+        assert G.node_level_crossing(-102181) == True
+        assert G.node_level_crossing(-102182) == False
+        assert G.node_level_crossing(-102183) == False
