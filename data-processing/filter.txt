@@ -13,3 +13,5 @@ highway=motorway
 =tertiary_link
 =living_street
 =road
+=service
+=pedestrian

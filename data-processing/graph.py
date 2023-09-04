@@ -9,6 +9,8 @@ class Graph(MultiDiGraph):
     Class inherits MultiDiGraph and adds additional methods
     """
 
+    ignore_highways = ["living_street", "pedestrian", "service"]
+
     @staticmethod
     def create_map_graph(filename):
         """
@@ -69,10 +71,10 @@ class Graph(MultiDiGraph):
         Returns
             int: The number of connected roads
         """
-        edges = list(self.out_edges(node))
+        edges = list(self.out_roads(node))
 
         adjacent_nodes = [edge[1] for edge in edges]
-        for edge in self.in_edges(node):
+        for edge in self.in_roads(node):
             if edge[0] not in adjacent_nodes:
                 adjacent_nodes.append(edge)
 
@@ -94,3 +96,78 @@ class Graph(MultiDiGraph):
             if road[2].get("junction") in ["roundabout", "circular"]:
                 return True
         return False
+
+    def in_roads(self, node):
+        """
+        Method to find incomming roads to a node that will be processed
+
+        Arguments
+            node: The node we are checking for incomming roads
+
+        Returns
+            list: Containing truples for the incomming roads
+        """
+        roads = self.in_edges(node, data=True)
+        roads = [road for road in roads if road[2].get("highway") not in self.ignore_highways]
+
+        return roads
+
+    def out_roads(self, node):
+        """
+        Method to find outgoining roads to a node that will be processed
+
+        Arguments
+            node: The node we are checking for outgoining roads
+
+        Returns
+            list: Containing truples for the outgoining roads
+        """
+        roads = self.out_edges(node, data=True)
+        roads = [road for road in roads if road[2].get("highway") not in self.ignore_highways]
+
+        return roads
+
+    def sort_roads(self, node, incomming):
+        """
+        This method will find and sort the roads at a given node into 2 categories - single lane or muilt lane
+
+        Argurments:
+            node: The node we are sorting the roads for
+            incomming: True if we are checking incomming roads, false for checking outgoing roads
+
+        Returns:
+            dictionay: Containing two keys as follows
+                single: For the roads with a single lane
+                muilt:: For the roads with 2 or more lanes
+        """
+
+        roads = self.in_roads(node) if incomming else self.out_roads(node)
+
+        # Empty lists to store the roads connected to the node in question
+        roads_single_lane = []
+        roads_multi_lanes = []
+
+        # Checking each road
+
+        for road in roads:
+            if road[2].get("highway") in ["living_street", "pedestrian", "service"]:
+                continue
+
+            # If the road has a lane attribute we will use this number
+            if lanes := road[2].get("lanes"):
+                if lanes == "1":
+                    roads_single_lane.append(road)
+                else:
+                    roads_multi_lanes.append(road)
+
+            # Otherwise we will use the type of road
+            else:
+                if road[2].get("highway") in ["unclassified"]:
+                    roads_single_lane.append(road)
+                else:
+                    roads_multi_lanes.append(road)
+
+        return {
+            "single" : roads_single_lane,
+            "multi" : roads_multi_lanes
+        }

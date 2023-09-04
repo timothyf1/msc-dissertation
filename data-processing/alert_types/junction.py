@@ -14,11 +14,9 @@ class Junction(AlertType):
         if G.node_part_of_roundabout(node):
             return []
 
-        in_roads = G.in_edges(node, data=True)
-        in_road_lanes = self.sort_roads(in_roads)
+        in_road_lanes = G.sort_roads(node, incomming=True)
 
-        out_roads = G.in_edges(node, data=True)
-        out_road_lanes = self.sort_roads(out_roads)
+        out_road_lanes = G.sort_roads(node, incomming=False)
 
         # Check for any incomming single-track roads
         if len(in_road_lanes["single"]) == 0:

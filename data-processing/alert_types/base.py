@@ -35,34 +35,6 @@ class AlertType(ABC):
             bearing = location["bearing"]
         )
 
-    def sort_roads(self, roads):
-        # Empty lists to store the roads connected to the node in question
-        roads_single_lane = []
-        roads_multi_lanes = []
-
-        # Checking each road
-
-        for road in roads:
-
-            # If the road has a lane attribute we will use this number
-            if lanes := road[2].get("lanes"):
-                if lanes == "1":
-                    roads_single_lane.append(road)
-                else:
-                    roads_multi_lanes.append(road)
-
-            # Otherwise we will use the type of road
-            else:
-                if road[2].get("highway") in ["unclassified"]:
-                    roads_single_lane.append(road)
-                else:
-                    roads_multi_lanes.append(road)
-
-        return {
-            "single" : roads_single_lane,
-            "multi" : roads_multi_lanes
-        }
-
     def find_alert_location(self, G, node, road, distance):
         """
         Calculates the alert location for a node along a given road and distance
@@ -107,7 +79,7 @@ class AlertType(ABC):
                 else:
                     next_node = current_road[0]
 
-                next_node_in_roads = G.in_edges(next_node, data=True)
+                next_node_in_roads = G.in_roads(next_node)
 
                 # Check to see if the next node is continuation of the road or a junction
                 if G.node_num_of_roads(next_node) == 2:

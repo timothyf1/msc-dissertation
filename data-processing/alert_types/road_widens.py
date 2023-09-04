@@ -6,11 +6,9 @@ class RoadWidens(AlertType):
 
     def alert_locations(self, G, node):
         if G.node_num_of_roads(node) == 2:
-            in_roads = G.in_edges(node, data=True)
-            in_road_lanes = self.sort_roads(in_roads)
+            in_road_lanes = G.sort_roads(node, incomming=True)
 
-            out_roads = G.out_edges(node, data=True)
-            out_road_lanes = self.sort_roads(out_roads)
+            out_road_lanes = G.sort_roads(node, incomming=False)
 
             if len(in_road_lanes["single"]) > 0 and len(out_road_lanes["multi"]) > 0:
                 location = self.find_alert_location(G, node, in_road_lanes["single"][0], 50)
