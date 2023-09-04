@@ -4,7 +4,8 @@
 
     <Preference
         android:key="advance_options_info"
-        android:title="@string/advance_alert_options_info" />
+        android:title="@string/advance_alert_options_info"
+        app:summary="@string/advance_alert_options_sum"/>
 
     <SeekBarPreference
         android:defaultValue="50"
