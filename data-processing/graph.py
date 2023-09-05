@@ -24,8 +24,7 @@ class Graph(MultiDiGraph):
         """
 
         # Adding railway key to list of tags to keep for nodes
-        tags_for_nodes = ox.settings.useful_tags_node + ["railway"]
-        ox.utils.config(useful_tags_node=tags_for_nodes)
+        ox.settings.useful_tags_node.append("railway")
 
         G = ox.graph_from_xml(f"{filename}", simplify=False, retain_all=True)
         G = ox.bearing.add_edge_bearings(G, precision=5)
@@ -155,8 +154,6 @@ class Graph(MultiDiGraph):
         # Checking each road
 
         for road in roads:
-            if road[2].get("highway") in ["living_street", "pedestrian", "service"]:
-                continue
 
             # If the road has a lane attribute we will use this number
             if lanes := road[2].get("lanes"):

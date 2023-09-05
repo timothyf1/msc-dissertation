@@ -33,6 +33,8 @@
   <node id='-101827' action='modify' visible='true' lat='51.35362005431' lon='-1.05655356633' />
   <node id='-101828' action='modify' visible='true' lat='51.35258217647' lon='-1.06953422219' />
   <node id='-101829' action='modify' visible='true' lat='51.36514733244' lon='-1.05947309101' />
+  <node id='-101839' action='modify' visible='true' lat='51.36103199305' lon='-1.09836432613' />
+  <node id='-101840' action='modify' visible='true' lat='51.36273571647' lon='-1.09551985306' />
   <way id='-101782' action='modify' visible='true'>
     <nd ref='-101801' />
     <nd ref='-101800' />
@@ -46,6 +48,7 @@
   <way id='-101786' action='modify' visible='true'>
     <nd ref='-101757' />
     <nd ref='-101753' />
+    <nd ref='-101840' />
     <nd ref='-101758' />
     <nd ref='-101802' />
     <nd ref='-101759' />
@@ -104,5 +107,17 @@
     <nd ref='-101829' />
     <tag k='highway' v='unclassified' />
     <tag k='oneway' v='yes' />
+  </way>
+  <way id='-101982' action='modify' visible='true'>
+    <nd ref='-101804' />
+    <nd ref='-101839' />
+    <nd ref='-101840' />
+    <tag k='highway' v='service' />
+  </way>
+  <way id='-102006' action='modify' visible='true'>
+    <nd ref='-101752' />
+    <nd ref='-101839' />
+    <nd ref='-101802' />
+    <tag k='highway' v='pedestrian' />
   </way>
 </osm>

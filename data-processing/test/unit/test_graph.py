@@ -143,6 +143,22 @@ class TestGraph(unittest.TestCase):
         assert len(roads_sorted["multi"]) == 2
 
     def test_sort_roads_3(self):
+        G = Graph.create_map_graph("test/osm-data/graph/map.osm")
+
+        roads_sorted = G.sort_roads(-101804, False)
+
+        assert len(roads_sorted["single"]) == 2
+        assert len(roads_sorted["multi"]) == 0
+
+    def test_sort_roads_4(self):
+        G = Graph.create_map_graph("test/osm-data/graph/map.osm")
+
+        roads_sorted = G.sort_roads(-101752, False)
+
+        assert len(roads_sorted["single"]) == 0
+        assert len(roads_sorted["multi"]) == 2
+
+    def test_sort_roads_5(self):
         G = Graph.create_map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
 
         roads_sorted = G.sort_roads(-102069, False)
