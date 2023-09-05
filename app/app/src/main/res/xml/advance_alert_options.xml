@@ -22,7 +22,7 @@
         android:key="adv_check_frequency"
         android:max="20"
         android:min="2"
-        android:title="@string/adv_distance_to_alert"
+        android:title="@string/adv_check_frequency"
         app:showSeekBarValue="true"
         app:singleLineTitle="false"
         app:summary="@string/adv_check_frequency_info" />
