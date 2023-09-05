@@ -28,6 +28,6 @@ class Junction(AlertType):
 
         alerts_points = []
         for road in in_road_lanes["single"]:
-            location = self.find_alert_location(G, node, road, 50)
+            location = self.find_alert_location(G, node, road)
             alerts_points.append(self.create_alert(node, location))
         return alerts_points

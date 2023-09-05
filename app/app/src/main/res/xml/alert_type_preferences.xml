@@ -4,10 +4,14 @@
     <SwitchPreference
         android:defaultValue="true"
         android:key="switch_alert_type_10"
-        android:title="@string/road_widens"/>
+        android:title="@string/settings_road_widens"/>
     <SwitchPreference
         android:defaultValue="true"
         android:key="switch_alert_type_20"
-        android:title="@string/junction"/>
+        android:title="@string/settings_junction"/>
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="switch_alert_type_30"
+        android:title="@string/settings_level_crossing"/>
 
 </PreferenceScreen>

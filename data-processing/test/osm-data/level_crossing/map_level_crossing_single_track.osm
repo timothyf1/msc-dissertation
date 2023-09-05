@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-102175' action='modify' visible='true' lat='51.34305256055' lon='-1.16274421473' />
+  <node id='-102176' action='modify' visible='true' lat='51.34286580641' lon='-1.16204521315' />
+  <node id='-102177' action='modify' visible='true' lat='51.3428561618' lon='-1.16127322345'>
+    <tag k='railway' v='level_crossing' />
+  </node>
+  <node id='-102178' action='modify' visible='true' lat='51.34294647026' lon='-1.16088442137' />
+  <node id='-102179' action='modify' visible='true' lat='51.34261416933' lon='-1.16255612996' />
+  <node id='-102180' action='modify' visible='true' lat='51.3428061852' lon='-1.16218417129' />
+  <node id='-102181' action='modify' visible='true' lat='51.34297014332' lon='-1.16150903121'>
+    <tag k='railway' v='level_crossing' />
+  </node>
+  <node id='-102182' action='modify' visible='true' lat='51.34314725251' lon='-1.16111882551' />
+  <node id='-102183' action='modify' visible='true' lat='51.34334189647' lon='-1.16109356039' />
+  <way id='-106321' action='modify' visible='true'>
+    <nd ref='-102175' />
+    <nd ref='-102176' />
+    <nd ref='-102177' />
+    <nd ref='-102178' />
+    <tag k='highway' v='tertiary' />
+  </way>
+  <way id='-106322' action='modify' visible='true'>
+    <nd ref='-102179' />
+    <nd ref='-102180' />
+    <nd ref='-102176' />
+    <nd ref='-102181' />
+    <nd ref='-102182' />
+    <nd ref='-102183' />
+    <tag k='highway' v='secondary' />
+  </way>
+</osm>

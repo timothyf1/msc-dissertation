@@ -1,5 +1,6 @@
 package com.example.gpssafetydrivingapp.alerts;
 
+import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -32,9 +33,6 @@ import java.util.Locale;
 
 public class AlertCheckerService extends Service {
 
-    private final int DISTANCE_FROM_ALERT = 40;
-    private final int TIME_BETWEEN_LOCATION_REQUESTS = 4000;
-
     private FusedLocationProviderClient fusedLocationClient;
     private LocationListener locationListener;
     private LocationRequest locationRequest;
@@ -55,7 +53,8 @@ public class AlertCheckerService extends Service {
         super.onCreate();
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
-        locationRequest = new LocationRequest.Builder(TIME_BETWEEN_LOCATION_REQUESTS)
+        int timeInterval = sharedPreferences.getInt("adv_check_frequency", 4) * 1000;
+        locationRequest = new LocationRequest.Builder(timeInterval)
                 .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
                 .build();
 
@@ -142,9 +141,11 @@ public class AlertCheckerService extends Service {
     }
     /** End of referenced code */
 
+    @SuppressLint("MissingPermission")
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.d("AlertCheckerService", "Starting AlertCheckerService");
+
         // Note permissions checks are done before the service starts
         fusedLocationClient.requestLocationUpdates(locationRequest, locationListener, Looper.getMainLooper());
         Log.d("AlertCheckerService", "Location updates requested");
@@ -168,17 +169,19 @@ public class AlertCheckerService extends Service {
     public void checkLocationAlert (Location location) {
         Log.d("AlertCheckerService", "Location Received" + location.toString());
 
+        int distance = sharedPreferences.getInt("adv_distance_to_alert", 50);
+
         Alert nearestAlert = alerts.findNearest(
                 location.getLatitude(),
                 location.getLongitude(),
-                DISTANCE_FROM_ALERT
+                distance
         );
 
         // Check to see if there is a alert found
         if (nearestAlert == null) {
             Log.d(
                     "AlertCheckerService",
-                    "Could not alert point within " + DISTANCE_FROM_ALERT + " meters");
+                    "Could not alert point within " + distance + " meters");
             return;
         }
         Log.d("AlertCheckerService", "Nearest Alert id: " + nearestAlert.getId());
@@ -279,6 +282,9 @@ public class AlertCheckerService extends Service {
                 alertText = alerts.getDrivingLeft()
                         ? getResources().getString(R.string.alert_type20_left)
                         : getResources().getString(R.string.alert_type20_right);
+                break;
+            case 30:
+                alertText = getResources().getString(R.string.alert_type30);
                 break;
             default:
                 return;

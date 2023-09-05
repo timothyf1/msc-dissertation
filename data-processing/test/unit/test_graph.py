@@ -111,7 +111,7 @@ class TestGraph(unittest.TestCase):
 
         assert len(alert_points) == 2
 
-    def test_node_alert_points_2(self):
+    def test_node_alert_points_3(self):
         G = Graph.create_map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
         node = -102068
 
@@ -153,3 +153,16 @@ class TestGraph(unittest.TestCase):
         assert len(roads_sorted["multi"]) == 2
         for road in roads_sorted["multi"]:
             assert road[2]["lanes"] == "2"
+
+    def test_node_level_crossing(self):
+        G = Graph.create_map_graph("test/osm-data/graph/map_level_crossing.osm")
+
+        assert G.node_level_crossing(-102175) == False
+        assert G.node_level_crossing(-102176) == False
+        assert G.node_level_crossing(-102177) == True
+        assert G.node_level_crossing(-102178) == False
+        assert G.node_level_crossing(-102179) == False
+        assert G.node_level_crossing(-102180) == False
+        assert G.node_level_crossing(-102181) == True
+        assert G.node_level_crossing(-102182) == False
+        assert G.node_level_crossing(-102183) == False

@@ -4,14 +4,35 @@
 
     <Preference
         android:key="advance_options_info"
-        android:title="@string/advance_alert_options_info" />
+        android:title="@string/advance_alert_options_info"
+        app:summary="@string/advance_alert_options_sum"/>
+
+    <SeekBarPreference
+        android:defaultValue="50"
+        android:key="adv_distance_to_alert"
+        android:max="100"
+        android:min="20"
+        android:title="@string/advance_distance_to_alert"
+        app:showSeekBarValue="true"
+        app:singleLineTitle="false"
+        app:summary="" />
+
+    <SeekBarPreference
+        android:defaultValue="4"
+        android:key="adv_check_frequency"
+        android:max="20"
+        android:min="2"
+        android:title="@string/advance_check_frequency"
+        app:showSeekBarValue="true"
+        app:singleLineTitle="false"
+        app:summary="@string/advance_check_frequency_info" />
 
     <SeekBarPreference
         android:defaultValue="45"
         android:key="adv_bearing"
         android:max="80"
         android:min="20"
-        android:title="@string/adv_bearing"
+        android:title="@string/advance_bearing"
         app:showSeekBarValue="true"
         app:singleLineTitle="false"
         app:summary="" />

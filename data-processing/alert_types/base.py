@@ -21,6 +21,8 @@ class AlertType(ABC):
     Base class for checking and calclating alert points
     """
 
+    distance_for_alert = 50
+
     @abstractmethod
     def alert_locations(self, G, node):
         pass
@@ -35,7 +37,7 @@ class AlertType(ABC):
             bearing = location["bearing"]
         )
 
-    def find_alert_location(self, G, node, road, distance):
+    def find_alert_location(self, G, node, road, distance=distance_for_alert):
         """
         Calculates the alert location for a node along a given road and distance
 
@@ -74,11 +76,8 @@ class AlertType(ABC):
 
             else:
                 distance_remaining -= current_road[2]["length"]
-                if current_node == current_road[0]:
-                    next_node = current_road[1]
-                else:
-                    next_node = current_road[0]
 
+                next_node = current_road[1] if current_node == current_road[0] else current_road[0]
                 next_node_in_roads = G.in_roads(next_node)
 
                 # Check to see if the next node is continuation of the road or a junction
