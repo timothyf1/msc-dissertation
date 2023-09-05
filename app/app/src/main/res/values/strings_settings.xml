@@ -21,7 +21,11 @@
     <string name="settings_min_time_info">The minimal time in seconds between alerts of the same type sound</string>
 
     <string name="advance_alert_options">Advance Alert Options</string>
-    <string name="advance_alert_options_info">The options on this page are for fine tuning the alert checker.\nIn most cases the default settings will fine.</string>
+    <string name="advance_alert_options_info">The options on this page are for fine tuning the alert checker</string>
+    <string name="advance_alert_options_sum">In most cases the default settings will fine</string>
 
+    <string name="advance_check_frequency">The interval in seconds to check a new location for possible alerts</string>
+    <string name="advance_check_frequency_info">This option requires the alert checker to be restarted after changing</string>
+    <string name="advance_distance_to_alert">The maximum distance the current location can be from an alert point</string>
     <string name="advance_bearing">The bearing offset allowed when checking the direction of alerts</string>
 </resources>
