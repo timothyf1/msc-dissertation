@@ -21,7 +21,6 @@ class TestJunction(unittest.TestCase):
         alert_points = []
 
         for node in G.nodes:
-            edges = G.edges(node, data=True)
             alert_points.extend(junction.alert_locations(G, node))
 
         assert len(alert_points) == 1
@@ -32,7 +31,6 @@ class TestJunction(unittest.TestCase):
 
         alert_points = []
         for node in G.nodes:
-            edges = G.edges(node, data=True)
             alert_points.extend(junction.alert_locations(G, node))
 
         assert len(alert_points) == 0
@@ -43,7 +41,6 @@ class TestJunction(unittest.TestCase):
 
         alert_points = []
         for node in G.nodes:
-            edges = G.edges(node, data=True)
             alert_points.extend(junction.alert_locations(G, node))
 
         assert len(alert_points) == 0
@@ -54,7 +51,6 @@ class TestJunction(unittest.TestCase):
 
         alert_points = []
         for node in G.nodes:
-            edges = G.edges(node, data=True)
             alert_points.extend(junction.alert_locations(G, node))
 
         assert len(alert_points) == 1

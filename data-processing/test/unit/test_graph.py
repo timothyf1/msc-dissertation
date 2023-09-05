@@ -111,7 +111,7 @@ class TestGraph(unittest.TestCase):
 
         assert len(alert_points) == 2
 
-    def test_node_alert_points_2(self):
+    def test_node_alert_points_3(self):
         G = Graph.create_map_graph("test/osm-data/graph/map_2_roads_with_lanes_att.osm")
         node = -102068
 

@@ -102,11 +102,8 @@ class AlertType(ABC):
 
             else:
                 distance_remaining -= current_road[2]["length"]
-                if current_node == current_road[0]:
-                    next_node = current_road[1]
-                else:
-                    next_node = current_road[0]
 
+                next_node = current_road[1] if current_node == current_road[0] else current_road[0]
                 next_node_in_roads = G.in_edges(next_node, data=True)
 
                 # Check to see if the next node is continuation of the road or a junction
