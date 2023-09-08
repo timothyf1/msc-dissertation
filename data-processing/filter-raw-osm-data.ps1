@@ -13,7 +13,7 @@ if (Test-Path $fileName) {
     }
 
     write-host "Begin filter."
-    ./osmfilter osm-raw/$fileBase --parameter-file=filter.txt > osm-filtered/$fileBase
+    ./osmfilter osm-raw/$fileBase --parameter-file=filter.txt -o="osm-filtered/$fileBase"
     write-host "Filtering completed"
 
 } else {
