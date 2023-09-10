@@ -67,13 +67,13 @@ public class PermissionsCheckFragment extends Fragment {
         Log.d("Permission Check", "Loading current permission status");
 
         if (ContextCompat.checkSelfPermission(requireContext(), POST_NOTIFICATIONS) == PermissionChecker.PERMISSION_GRANTED) {
-            Log.d("Permission Check", "Notifications already granted updating text and disable button");
+            Log.v("Permission Check", "Notifications already granted updating text and disable button");
             binding.textViewStatusNot.setText(R.string.granted);
             binding.buttonGrantNotifications.setEnabled(false);
         }
 
         if (ContextCompat.checkSelfPermission(requireContext(), ACCESS_FINE_LOCATION) == PermissionChecker.PERMISSION_GRANTED) {
-            Log.d("Permission Check", "Fine location already granted updating text and disable button");
+            Log.v("Permission Check", "Fine location already granted updating text and disable button");
             binding.textViewStatusPreciseLocation.setText(R.string.granted);
             binding.buttonGrantLocationPr.setEnabled(false);
             binding.buttonGrantBackLocation.setEnabled(true);
@@ -83,7 +83,7 @@ public class PermissionsCheckFragment extends Fragment {
         }
 
         if (ContextCompat.checkSelfPermission(requireContext(), ACCESS_BACKGROUND_LOCATION) == PermissionChecker.PERMISSION_GRANTED) {
-            Log.d("Permission Check", "Background location already granted updating text and disable button");
+            Log.v("Permission Check", "Background location already granted updating text and disable button");
             binding.textViewStatusLocation.setText(R.string.granted);
             binding.buttonGrantBackLocation.setEnabled(false);
         }

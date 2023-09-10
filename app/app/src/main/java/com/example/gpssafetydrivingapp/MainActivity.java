@@ -99,14 +99,14 @@ public class MainActivity extends AppCompatActivity {
                 if (grantResults[0] == PermissionChecker.PERMISSION_GRANTED) {
                     Log.d("Permission Check Result", "Notifications Granted");
                 } else {
-                    Log.d("Permission Check Result", "Notifications Denied");
+                    Log.w("Permission Check Result", "Notifications Denied");
                 }
                 break;
             case 8:
                 if (grantResults[0] == PermissionChecker.PERMISSION_GRANTED) {
                     Log.d("Permission Check Result", "Precise Location Granted");
                 } else {
-                    Log.d("Permission Check Result", "Precise Location Denied");
+                    Log.w("Permission Check Result", "Precise Location Denied");
                 }
                 break;
             case 9:
@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.d("Permission Check Result", "Background Location Granted");
                     navController.popBackStack();
                 } else {
-                    Log.d("Permission Check Result", "Background Location Denied");
+                    Log.w("Permission Check Result", "Background Location Denied");
                 }
                 break;
         }

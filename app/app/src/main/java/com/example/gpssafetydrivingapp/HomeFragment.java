@@ -58,15 +58,15 @@ public class HomeFragment extends Fragment {
                 .navigate(R.id.action_homeFragment_to_permissionsCheckFragment));
 
         binding.buttonActivate.setOnClickListener(v -> {
-            Log.d("Home Fragment", "Activate/Deactivate button pressed");
+            Log.v("Home Fragment", "Activate/Deactivate button pressed");
 
             if (binding.buttonActivate.getText().equals("Deactivate")) {
-                Log.d("Home Fragment", "Turn off alerts");
+                Log.v("Home Fragment", "Turn off alerts");
                 binding.textStatus.setText(R.string.inactive);
                 binding.buttonActivate.setText(R.string.activate);
                 AlertCheckerService.stopAlertChecker(requireContext());
             } else {
-                Log.d("Home Fragment", "Turn on alerts");
+                Log.v("Home Fragment", "Turn on alerts");
                 binding.textStatus.setText(R.string.active);
                 binding.buttonActivate.setText(R.string.deactivate);
                 SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -74,7 +74,7 @@ public class HomeFragment extends Fragment {
                 editor.commit();
                 AlertCheckerService.startAlertChecker(requireContext());
             }
-            Log.d("Home Fragment", "Settings updated");
+            Log.v("Home Fragment", "Settings updated");
         });
 
     }

@@ -53,7 +53,7 @@ public class SettingsFragment extends PreferenceFragmentCompat {
         SwitchPreference alertSwitch = getPreferenceManager().findPreference("switch_alerts_enable");
         assert alertSwitch != null;
         alertSwitch.setOnPreferenceClickListener(preference -> {
-            Log.d("Settings", "alert switch clicked");
+            Log.v("Settings", "Alert switch clicked");
             if (sharedPreferences.getBoolean("switch_alerts_enable", false)) {
                 AlertCheckerService.startAlertChecker(requireContext());
             } else {

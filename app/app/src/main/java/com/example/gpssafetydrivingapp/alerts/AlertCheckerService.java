@@ -152,20 +152,18 @@ public class AlertCheckerService extends Service {
     @SuppressLint("MissingPermission")
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("AlertCheckerService", "Starting AlertCheckerService");
+        lastAlertTimes = new long[100];
 
         // Note permissions checks are done before the service starts
         fusedLocationClient.requestLocationUpdates(locationRequest, locationListener, Looper.getMainLooper());
-        Log.d("AlertCheckerService", "Location updates requested");
+        Log.d("AlertCheckerService", "AlertCheckerService Location Updates added");
 
-        lastAlertTimes = new long[100];
         return START_STICKY;
     }
 
     // Runs when stopping the service to remove the location updates
     @Override
     public void onDestroy() {
-        Log.d("AlertCheckerService", "Stopping AlertCheckerService");
         fusedLocationClient.removeLocationUpdates(locationListener);
         Log.d("AlertCheckerService", "Location updates removed");
     }
@@ -175,7 +173,7 @@ public class AlertCheckerService extends Service {
      * @param location the location to be checked for an alert
      */
     public void checkLocationAlert (Location location) {
-        Log.d("AlertCheckerService", "Location Received" + location.toString());
+        Log.d("AlertCheckerService", "Location Received");
 
         int distance = sharedPreferences.getInt("adv_distance_to_alert", 50);
 
@@ -273,7 +271,7 @@ public class AlertCheckerService extends Service {
      * @param alertPoint the alert details we are making the alert for
      */
     private void createAlert(Alert alertPoint) {
-        Log.d("AlertCheckerService", "Alert type: " + alertPoint.getAlertType());
+        Log.v("AlertCheckerService", "Alert type: " + alertPoint.getAlertType());
 
         String alertText;
 
@@ -298,7 +296,7 @@ public class AlertCheckerService extends Service {
                 return;
         }
 
-        Log.d("AlertCheckerService", "Alert text: " + alertText);
+        Log.i("AlertCheckerService", "Alert text: " + alertText);
 
         textToSpeech.speak(alertText, TextToSpeech.QUEUE_FLUSH, null, null);
     }
@@ -312,7 +310,7 @@ public class AlertCheckerService extends Service {
 
         // Check if permissions for alert checker are granted
         if (AlertCheckerService.checkMissingPermissions(context)) {
-            Log.e("AlertChecker", "Missing permissions");
+            Log.w("AlertChecker", "Missing permissions abort starting alert checker");
 
             // Update setting to reflect alert checker not started
             SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
@@ -328,7 +326,7 @@ public class AlertCheckerService extends Service {
         // Create intent and start service
         Intent alertServiceIntent = new Intent(context, AlertCheckerService.class);
         context.startForegroundService(alertServiceIntent);
-        Log.d("AlertChecker", "Alert checker started");
+        Log.i("AlertChecker", "Alert checker started");
     }
 
     /**
@@ -345,7 +343,7 @@ public class AlertCheckerService extends Service {
         SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
         editor.putBoolean("switch_alerts_enable", false);
         editor.commit();
-        Log.d("AlertChecker", "Alert checker stopped");
+        Log.i("AlertChecker", "Alert checker stopped");
     }
 
     /**
