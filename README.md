@@ -7,6 +7,9 @@ There are two parts to this project.
 - Data processing to produce a set of alert points
 - Mobile application to give audible alerts while driving
 
+## OpenStreetMap data
+
+OpenStreetMap has been used in this project as the map data source. OpenStreetMap® is open data, licensed under the [Open Data Commons Open Database License](https://opendatacommons.org/licenses/odbl/) (ODbL) by the [OpenStreetMap Foundation](https://osmfoundation.org/) (OSMF). Further information available at [openstreetmap.org/copyright](https://www.openstreetmap.org/copyright)
 
 ## Used Libraries
 
