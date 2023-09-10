@@ -30,6 +30,8 @@ def find_alert_points(filename, dump=False, debug_file=False):
 
     print(f"Number of alert locations: {len(alertpoints)}")
 
+    os.mkdir("alerts")
+
     with open(f"alerts/alerts_{input_file[13:-4]}.json", "w") as f:
         json.dump(
             {
