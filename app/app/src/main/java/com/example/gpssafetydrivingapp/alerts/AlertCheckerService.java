@@ -1,6 +1,10 @@
 package com.example.gpssafetydrivingapp.alerts;
 
+import static android.Manifest.permission.ACCESS_BACKGROUND_LOCATION;
+import static android.Manifest.permission.POST_NOTIFICATIONS;
+
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -9,6 +13,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.IBinder;
 import android.os.Looper;
@@ -17,6 +22,9 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.preference.PreferenceManager;
 
 import com.example.gpssafetydrivingapp.R;
@@ -125,7 +133,7 @@ public class AlertCheckerService extends Service {
      */
     private AlertsArea loadAlertPoints() {
         String myJson = inputStreamToString(
-                getApplicationContext().getResources().openRawResource(R.raw.alerts_silchester)
+                getApplicationContext().getResources().openRawResource(R.raw.alerts_england)
         );
         return new Gson().fromJson(myJson, AlertsArea.class);
     }
@@ -295,17 +303,68 @@ public class AlertCheckerService extends Service {
         textToSpeech.speak(alertText, TextToSpeech.QUEUE_FLUSH, null, null);
     }
 
+    /**
+     * Method to start the alert checker
+     * @param context the applications context
+     */
     public static void startAlertChecker(Context context) {
         Log.d("AlertChecker", "Starting alert checker");
+
+        // Check if permissions for alert checker are granted
+        if (AlertCheckerService.checkMissingPermissions(context)) {
+            Log.e("AlertChecker", "Missing permissions");
+
+            // Update setting to reflect alert checker not started
+            SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+            editor.putBoolean("switch_alerts_enable", false);
+            editor.commit();
+
+            // Change to missing permissions fragment
+            NavController navController = Navigation.findNavController((Activity) context, R.id.nav_host_fragment_content_main);
+            navController.navigate(R.id.permissionsCheckFragment);
+            return;
+        }
+
+        // Create intent and start service
         Intent alertServiceIntent = new Intent(context, AlertCheckerService.class);
         context.startForegroundService(alertServiceIntent);
         Log.d("AlertChecker", "Alert checker started");
     }
 
+    /**
+     * Method to stop the alert checker
+     * @param context the applications context
+     */
     public static void stopAlertChecker(Context context) {
         Log.d("AlertChecker", "Stopping alert checker");
+
+        // Creating the intent to stop the service
         Intent alertServiceIntent = new Intent(context, AlertCheckerService.class);
         context.stopService(alertServiceIntent);
+
+        SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(context).edit();
+        editor.putBoolean("switch_alerts_enable", false);
+        editor.commit();
         Log.d("AlertChecker", "Alert checker stopped");
+    }
+
+    /**
+     * Checks to see if there are any missing permissions for the alert checker service to run
+     * @return boolean true if there is a missing permission
+     */
+    public static boolean checkMissingPermissions(Context context) {
+        // Check for notifications
+        if (ContextCompat.checkSelfPermission(context, POST_NOTIFICATIONS) == PackageManager.PERMISSION_DENIED) {
+            Log.d("AlertChecker", "Missing notification permission");
+            return true;
+        }
+
+        // Check for background location
+        if (ContextCompat.checkSelfPermission(context, ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_DENIED) {
+            Log.d("AlertChecker", "Missing background location permission");
+            return true;
+        }
+
+        return false;
     }
 }

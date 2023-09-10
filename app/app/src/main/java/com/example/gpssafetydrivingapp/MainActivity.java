@@ -1,10 +1,6 @@
 package com.example.gpssafetydrivingapp;
 
-import static android.Manifest.permission.ACCESS_BACKGROUND_LOCATION;
-import static android.Manifest.permission.POST_NOTIFICATIONS;
-
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -12,7 +8,6 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.PermissionChecker;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -53,15 +48,6 @@ public class MainActivity extends AppCompatActivity {
 
         // Start alert checker if enabled in preferences
         if (sharedPreferences.getBoolean("switch_alerts_enable", false)) {
-            // Check for missing permissions
-            if (checkMissingPermissions()) {
-                Log.e("AlertChecker", "Missing permissions, not starting alert checker");
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putBoolean("switch_alerts_enable", false);
-                editor.commit();
-                return;
-            }
-
             AlertCheckerService.startAlertChecker(getApplicationContext());
         }
     }
@@ -102,73 +88,6 @@ public class MainActivity extends AppCompatActivity {
 //        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         return NavigationUI.navigateUp(navController, appBarConfiguration)
                 || super.onSupportNavigateUp();
-    }
-
-    // Code to register and unregister an event listener on preference change
-    // This code was adapted from Stack Overflow post by thumbmunkeys 2010-09-26
-    // accessed 2023-06-28
-    // https://stackoverflow.com/a/3799894
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Set up a listener whenever a key changes
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this::onSharedPreferenceChanged);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        // Unregister the listener whenever a key changes
-        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this::onSharedPreferenceChanged);
-    }
-    // End of referenced code
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,String key) {
-
-        if ("switch_alerts_enable".equals(key)) {
-            boolean active = sharedPreferences.getBoolean("switch_alerts_enable", false);
-            Log.d("AlertChecker", "Alerts setting change to " + active);
-
-            if (active) {
-                Log.d("AlertChecker", "Alerts turned on, checking permissions");
-
-                // Check for missing permissions
-                if (checkMissingPermissions()) {
-                    Log.e("AlertChecker", "Missing permissions");
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.putBoolean("switch_alerts_enable", false);
-                    editor.commit();
-                    navController.navigate(R.id.permissionsCheckFragment);
-                    return;
-                }
-
-                Log.d("AlertChecker", "Permissions are granted");
-
-                AlertCheckerService.startAlertChecker(getApplicationContext());
-            } else {
-                AlertCheckerService.stopAlertChecker(getApplicationContext());
-            }
-        }
-
-    }
-
-    /**
-     * Checks to see if there are any missing permissions for the alert checker service to run
-     * @return boolean true if there is a missing permission
-     */
-    public boolean checkMissingPermissions() {
-        // Check for notifications
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), POST_NOTIFICATIONS) == PackageManager.PERMISSION_DENIED) {
-            Log.d("AlertChecker", "Missing notification permission");
-            return true;
-        }
-
-        // Check for background location
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), ACCESS_BACKGROUND_LOCATION) == PackageManager.PERMISSION_DENIED) {
-            Log.d("AlertChecker", "Missing background location permission");
-            return true;
-        }
-
-        return false;
     }
 
     @Override

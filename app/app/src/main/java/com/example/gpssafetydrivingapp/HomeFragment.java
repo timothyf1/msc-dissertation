@@ -9,13 +9,17 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
+import com.example.gpssafetydrivingapp.alerts.AlertCheckerService;
 import com.example.gpssafetydrivingapp.databinding.FragmentHomeBinding;
 
 public class HomeFragment extends Fragment {
 
+    NavController navController;
     SharedPreferences sharedPreferences;
 
     private FragmentHomeBinding binding;
@@ -43,6 +47,7 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.requireActivity());
+        navController = Navigation.findNavController(view);
 
         binding.buttonSettings.setOnClickListener(v ->
                 NavHostFragment.findNavController(HomeFragment.this)
@@ -55,19 +60,20 @@ public class HomeFragment extends Fragment {
         binding.buttonActivate.setOnClickListener(v -> {
             Log.d("Home Fragment", "Activate/Deactivate button pressed");
 
-            SharedPreferences.Editor editor = sharedPreferences.edit();
             if (binding.buttonActivate.getText().equals("Deactivate")) {
                 Log.d("Home Fragment", "Turn off alerts");
                 binding.textStatus.setText(R.string.inactive);
                 binding.buttonActivate.setText(R.string.activate);
-                editor.putBoolean("switch_alerts_enable", false);
+                AlertCheckerService.stopAlertChecker(requireContext());
             } else {
                 Log.d("Home Fragment", "Turn on alerts");
                 binding.textStatus.setText(R.string.active);
                 binding.buttonActivate.setText(R.string.deactivate);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
                 editor.putBoolean("switch_alerts_enable", true);
+                editor.commit();
+                AlertCheckerService.startAlertChecker(requireContext());
             }
-            editor.commit();
             Log.d("Home Fragment", "Settings updated");
         });
 
