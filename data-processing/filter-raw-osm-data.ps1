@@ -11,7 +11,7 @@ if (Test-Path $fileName) {
         }
 
         write-host "Begin conversion to .osm"
-        ./osmconvert64-0.8.8p $file --out-osm -o="osm-raw/$fileBase"
+        ./osmconvert64 $file --out-osm -o="osm-raw/$fileBase"
         write-host "Conversion to .osm completed."
     } elseif ($file.Extension -eq ".osm") {
         $fileBase = $file.Name
