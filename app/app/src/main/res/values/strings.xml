@@ -2,7 +2,7 @@
     <string name="app_name">GPSSafetyDrivingApp</string>
 
     <!-- Strings used for fragments for navigation -->
-    <string name="home_fragment_label">GPS Safety driving</string>
+    <string name="home_fragment_label">GPS Safety Alerts App</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
@@ -22,6 +22,12 @@
 
     <string name="check_permissions">Check Permissions</string>
     <string name="settings">Settings</string>
+
+    <!-- About Fragment -->
+    <string name="about">About GPS Safety Alerts App</string>
+    <string name="about_me">This Android app has been made by Timothy Standen as part of my dissertation project for Msc Computing at Cardiff University.</string>
+    <string name="about_osm">As part of the data processing for generating the alert points, OpenStreetMap data was used for this purpose.</string>
+    <string name="about_osm_license">OpenStreetMap is open data, licensed under the Open Data Commons Open Database License (ODbL) by the OpenStreetMap Foundation (OSMF). More information is available at openstreetmap.org/copyright</string>
 
     <!-- Permission Check -->
     <string name="permissions_check">Permissions Check</string>

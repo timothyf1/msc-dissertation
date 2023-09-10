@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.preference.PreferenceManager;
 
 import com.example.gpssafetydrivingapp.alerts.AlertCheckerService;
@@ -48,14 +47,6 @@ public class HomeFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this.requireActivity());
         navController = Navigation.findNavController(view);
-
-        binding.buttonSettings.setOnClickListener(v ->
-                NavHostFragment.findNavController(HomeFragment.this)
-                .navigate(R.id.action_homeFragment_to_settingsFragment));
-
-        binding.buttonCheckPermissions.setOnClickListener(v ->
-                NavHostFragment.findNavController(HomeFragment.this)
-                .navigate(R.id.action_homeFragment_to_permissionsCheckFragment));
 
         binding.buttonActivate.setOnClickListener(v -> {
             Log.v("Home Fragment", "Activate/Deactivate button pressed");

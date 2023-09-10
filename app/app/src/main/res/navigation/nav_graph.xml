@@ -34,7 +34,7 @@
     <fragment
         android:id="@+id/aboutFragment"
         android:name="com.example.gpssafetydrivingapp.AboutFragment"
-        android:label="fragment_about"
+        android:label="@string/about"
         tools:layout="@layout/fragment_about" />
     <fragment
         android:id="@+id/permissionsCheckFragment"
