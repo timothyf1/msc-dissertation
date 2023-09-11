@@ -54,3 +54,33 @@ class TestJunction(unittest.TestCase):
             alert_points.extend(junction.alert_locations(G, node))
 
         assert len(alert_points) == 1
+
+    def test_junction_two_oneway_into_one(self):
+        G = Graph.create_map_graph("test/osm-data/junction/junction_two_oneway_into_one.osm")
+        junction = Junction()
+
+        alert_points = []
+        for node in G.nodes:
+            alert_points.extend(junction.alert_locations(G, node))
+
+        assert len(alert_points) == 0
+
+    def test_junction_two_single_track_single_2_lane_leave(self):
+        G = Graph.create_map_graph("test/osm-data/junction/junction_two_single_track_single_2_lane_leave.osm")
+        junction = Junction()
+
+        alert_points = []
+        for node in G.nodes:
+            alert_points.extend(junction.alert_locations(G, node))
+
+        assert len(alert_points) == 0
+
+    def test_junction_unclass_meet_2_lane_oneway(self):
+        G = Graph.create_map_graph("test/osm-data/junction/junction_unclass_meet_2_lane_oneway.osm")
+        junction = Junction()
+
+        alert_points = []
+        for node in G.nodes:
+            alert_points.extend(junction.alert_locations(G, node))
+
+        assert len(alert_points) == 0

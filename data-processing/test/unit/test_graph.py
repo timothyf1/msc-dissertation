@@ -182,3 +182,23 @@ class TestGraph(unittest.TestCase):
         assert G.node_level_crossing(-102181) == True
         assert G.node_level_crossing(-102182) == False
         assert G.node_level_crossing(-102183) == False
+
+    def test_node_outgoing_one_way_1(self):
+        G = Graph.create_map_graph("test/osm-data/graph/map_one_way_1.osm")
+
+        assert G.outgoing_one_way(-101756) == True
+
+    def test_node_outgoing_one_way_2(self):
+        G = Graph.create_map_graph("test/osm-data/graph/map_one_way_2.osm")
+
+        assert G.outgoing_one_way(-101756) == True
+
+    def test_node_outgoing_one_way_3(self):
+        G = Graph.create_map_graph("test/osm-data/graph/map_one_way_3.osm")
+
+        assert G.outgoing_one_way(-101756) == False
+
+    def test_node_outgoing_one_way_4(self):
+        G = Graph.create_map_graph("test/osm-data/road_widens/tert_1_to_2_lanes.osm")
+
+        assert G.outgoing_one_way(-101899) == False

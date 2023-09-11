@@ -8,13 +8,11 @@
     <nd ref='-101899' />
     <tag k='highway' v='tertiary' />
     <tag k='lanes' v='1' />
-    <tag k='oneway' v='yes' />
   </way>
   <way id='-102410' action='modify' visible='true'>
     <nd ref='-101899' />
     <nd ref='-101900' />
     <tag k='highway' v='tertiary' />
     <tag k='lanes' v='2' />
-    <tag k='oneway' v='yes' />
   </way>
 </osm>

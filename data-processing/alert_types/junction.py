@@ -26,6 +26,10 @@ class Junction(AlertType):
         if len(out_road_lanes["multi"]) == 0:
             return []
 
+        # Check to see if the outgoing 2 or more lanes roads are one way
+        if G.outgoing_one_way(node):
+            return []
+
         alerts_points = []
         for road in in_road_lanes["single"]:
             location = self.find_alert_location(G, node, road)

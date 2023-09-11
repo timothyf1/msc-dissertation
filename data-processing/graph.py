@@ -189,3 +189,22 @@ class Graph(MultiDiGraph):
             return True
 
         return False
+
+    def outgoing_one_way(self, node):
+        """
+        Check to see if all the outgoing of roads of two or more lanes from a node are one way
+
+        Arguments
+            node: The node we wish to check
+
+        Returns
+            boolean: True if all the roads leaving the node are one-way
+        """
+
+        out_roads = self.sort_roads(node, False)["multi"]
+
+        for road in out_roads:
+            if not road[2].get("oneway"):
+                return False
+
+        return True
