@@ -2,6 +2,7 @@ import json
 import sys
 import os
 import pickle
+import osmnx as ox
 
 from graph import Graph
 

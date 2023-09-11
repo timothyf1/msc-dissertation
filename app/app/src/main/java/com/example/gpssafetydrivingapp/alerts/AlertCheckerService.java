@@ -175,7 +175,7 @@ public class AlertCheckerService extends Service {
     public void checkLocationAlert (Location location) {
         Log.d("AlertCheckerService", "Location Received");
 
-        int distance = sharedPreferences.getInt("adv_distance_to_alert", 50);
+        int distance = sharedPreferences.getInt("adv_distance_to_alert", 60);
 
         Alert nearestAlert = alerts.findNearest(
                 location.getLatitude(),
@@ -187,7 +187,7 @@ public class AlertCheckerService extends Service {
         if (nearestAlert == null) {
             Log.d(
                     "AlertCheckerService",
-                    "Could not alert point within " + distance + " meters");
+                    "Could not locate alert point within " + distance + " meters");
             return;
         }
         Log.d("AlertCheckerService", "Nearest Alert id: " + nearestAlert.getId());

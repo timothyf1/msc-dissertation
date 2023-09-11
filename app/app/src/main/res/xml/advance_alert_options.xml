@@ -8,7 +8,7 @@
         app:summary="@string/advance_alert_options_sum"/>
 
     <SeekBarPreference
-        android:defaultValue="50"
+        android:defaultValue="60"
         android:key="adv_distance_to_alert"
         android:max="100"
         android:min="20"
