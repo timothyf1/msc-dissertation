@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<osm version='0.6' generator='JOSM'>
+  <node id='-101902' action='modify' visible='true' lat='51.36010097311' lon='-1.14581799111' />
+  <node id='-101903' action='modify' visible='true' lat='51.35970306214' lon='-1.14476527789' />
+  <node id='-101904' action='modify' visible='true' lat='51.36023068783' lon='-1.14488598901' />
+  <node id='-101905' action='modify' visible='true' lat='51.3593787709' lon='-1.14402978225' />
+  <node id='-101906' action='modify' visible='true' lat='51.36060458928' lon='-1.14951584423' />
+  <way id='-102415' action='modify' visible='true'>
+    <nd ref='-101902' />
+    <nd ref='-101903' />
+    <tag k='highway' v='tertiary' />
+    <tag k='lanes' v='1' />
+  </way>
+  <way id='-102416' action='modify' visible='true'>
+    <nd ref='-101904' />
+    <nd ref='-101903' />
+    <tag k='highway' v='tertiary' />
+    <tag k='lanes' v='1' />
+  </way>
+  <way id='-102417' action='modify' visible='true'>
+    <nd ref='-101903' />
+    <nd ref='-101905' />
+    <tag k='highway' v='tertiary' />
+    <tag k='lanes' v='2' />
+    <tag k='oneway' v='yes' />
+  </way>
+</osm>
