@@ -2,6 +2,8 @@
 
 This is the repository for my Msc Computing Dissertation.
 
+For the code at submission see the branch [submission-code](https://github.com/timothyf1/msc-dissertation/tree/submission-code)
+
 There are two parts to this project.
 
 - Data processing to produce a set of alert points
